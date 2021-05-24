@@ -13,6 +13,9 @@ image_enjoy = "web.site/enjoy"
 image_download_sharemods = "web.site/sharemods"
 image_download_workshop = "web.site/workshop"
 image_download_trucky = "web.site/trucky"
+bus_resources_forums = "bus.stuff/forums"
+bus_resources_workshop = "bus.stuff/workshop"
+bus_resources_trucky = "bus.stuff/trucky"
 
 class DescVars:
     def __init__(self, game_short, mod_name):
@@ -171,6 +174,8 @@ class TrackerApp:
         desc = ""
         desc += "[img]{}[/img]\n".format(desc_vars.header_image_link)
         desc += desc_vars.short_description + "\n\n"
+        if desc_vars.bus_pack:
+            desc += "[b]This mod requires my [url={}]shared bus resources[/url] to work![/b]\n\n".format(bus_resources_workshop)
         if desc_vars.other_pack:
             desc += "{} pack available [url={}]here[/url].\n\n".format(desc_vars.other_game, desc_vars.other_pack_workshop_link)
         if len(desc_vars.paintjobs) >= 1:
@@ -222,6 +227,8 @@ class TrackerApp:
         desc += "[img]{}[/img]\n\n".format(desc_vars.forums_screenshot_image_link)
         desc += "[img]{}[/img]\n".format(desc_vars.header_image_link)
         desc += desc_vars.short_description + "\n\n"
+        if desc_vars.bus_pack:
+            desc += "[b]This mod requires my [url={}]shared bus resources[/url] to work![/b]\n\n".format(bus_resources_forums)
         if desc_vars.other_pack:
             desc += "{} pack available [url={}]here[/url].\n\n".format(desc_vars.other_game, desc_vars.other_pack_forums_link)
         if len(desc_vars.paintjobs) >= 1:
@@ -275,6 +282,8 @@ class TrackerApp:
         desc += "<div style=\"max-width: 650px\">\n"
         desc += "    <img src=\"{}\" style=\"padding-bottom: 5px\">\n".format(desc_vars.header_image_link)
         desc += "    <p>{}</p>\n".format(desc_vars.short_description)
+        if desc_vars.bus_pack:
+            desc += "    <p style=\"font-weight: 700\">This mod requires my <a style=\"color: white; text-decoration: underline\" href=\"{}\">shared bus resources</a>to work!</p>\n".format(bus_resources_trucky)
         if desc_vars.other_pack:
             desc += "    <p>{} pack available <a style=\"color: white; text-decoration: underline\" href=\"{}\">here</a>.</p>\n".format(desc_vars.other_game, desc_vars.other_pack_trucky_link)
         if len(desc_vars.paintjobs) >= 1:
@@ -324,7 +333,48 @@ class TrackerApp:
         self.description_output.insert("1.0", desc)
 
     def plain_text_description(self, *args):
-        pass
+        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
+        desc = ""
+        desc += desc_vars.short_description + "\n\n"
+        if desc_vars.bus_pack:
+            desc += ">> This mod REQUIRES my shared bus resources to work! <<\n"
+            desc += "Download it here: {}\n\n".format(bus_resources_forums)
+        if len(desc_vars.paintjobs) >= 1:
+            desc += "Paintjobs included:\n"
+            for pj in desc_vars.paintjobs:
+                desc += "- {}\n".format(pj)
+            desc += "\n"
+        if desc_vars.bus_pack:
+            desc += "Buses supported:\n"
+            for veh in desc_vars.truck_mods:
+                desc += "- {}'s {}\n".format(veh.mod_author, veh.name)
+            desc += "\n"
+        else:
+            if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
+                desc += "Trucks supported:\n"
+                if len(desc_vars.trucks) >= 1:
+                    for veh in desc_vars.trucks:
+                        desc += "- {}\n".format(veh.name)
+                if len(desc_vars.truck_mods) >= 1:
+                    for veh in desc_vars.truck_mods:
+                        desc += "- {}'s {}\n".format(veh.mod_author, veh.name)
+                desc += "\n"
+            if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
+                desc += "Trailers supported:\n"
+                if len(desc_vars.trailers) >= 1:
+                    for veh in desc_vars.trailers:
+                        desc += "- {}\n".format(veh.name)
+                if len(desc_vars.trailer_mods) >= 1:
+                    for veh in desc_vars.trailer_mods:
+                        desc += "- {}'s {}\n".format(veh.mod_author, veh.name)
+                desc += "\n"
+        if desc_vars.more_info != "":
+            desc += desc_vars.more_info + "\n\n"
+        if desc_vars.other_pack:
+            desc += "I've also made a pack for {}: {}".format(desc_vars.other_game, desc_vars.other_pack_sharemods_link)
+        desc += "Please don't reupload my mods to other sites. Thanks, and enjoy! :)"
+        self.description_output.delete("1.0", "end")
+        self.description_output.insert("1.0", desc)
 
     def short_description(self, *args):
         pass
