@@ -97,12 +97,12 @@ class TrackerApp:
         self.variable_game = tk.StringVar(None, "Euro Truck Simulator 2")
         self.variable_game.trace("w", self.update_selectable_mods)
         self.variable_selected_mod = tk.StringVar(None, "")
-        self.variable_directory = tk.StringVar(None, "D:/Documents/Trucksim/Uploading")
+        # self.variable_directory = tk.StringVar(None, "D:/Documents/Trucksim/Uploading")
 
         self.panel_mod = ttk.LabelFrame(self.container, text = "Mod Selection")
         self.panel_mod.grid(row = 0, column = 0, sticky = "new", padx = 5, pady = (5, 0))
-        self.panel_package = ttk.LabelFrame(self.container, text = "Package Generator")
-        self.panel_package.grid(row = 1, column = 0, sticky = "ew", padx = 5)
+        # self.panel_package = ttk.LabelFrame(self.container, text = "Package Generator")
+        # self.panel_package.grid(row = 1, column = 0, sticky = "ew", padx = 5)
         self.panel_description = ttk.LabelFrame(self.container, text = "Description Generator")
         self.panel_description.grid(row = 2, column = 0, sticky = "sew", padx = 5, pady = (0, 5))
 
@@ -113,32 +113,32 @@ class TrackerApp:
         self.panel_mod.columnconfigure(0, weight = 1)
         self.panel_mod.columnconfigure(1, weight = 6)
 
-        self.current_directory = ttk.Label(self.panel_package, textvariable = self.variable_directory)
-        self.current_directory.grid(row = 0, column = 0, columnspan = 3, sticky = "new", padx = 5, pady = (5, 0))
-        self.directory_changer = ttk.Button(self.panel_package, text = "Change directory", command = lambda : self.change_directory())
-        self.directory_changer.grid(row = 1, column = 0, sticky = "we", padx = (5, 0))
-        self.workshop_generator = ttk.Button(self.panel_package, text = "Generate Workshop package", command = lambda : self.generate_workshop())
-        self.workshop_generator.grid(row = 1, column = 1, sticky = "we", padx = 5)
-        self.standalone_generator = ttk.Button(self.panel_package, text = "Generate standalone package", command = lambda : self.generate_standalone())
-        self.standalone_generator.grid(row = 1, column = 2, sticky = "we", padx = (0, 5), pady = 5)
-        self.panel_package.columnconfigure(0, weight = 1)
-        self.panel_package.columnconfigure(1, weight = 1)
-        self.panel_package.columnconfigure(2, weight = 1)
+        # self.current_directory = ttk.Label(self.panel_package, textvariable = self.variable_directory)
+        # self.current_directory.grid(row = 0, column = 0, columnspan = 3, sticky = "new", padx = 5, pady = (5, 0))
+        # self.directory_changer = ttk.Button(self.panel_package, text = "Change directory", command = lambda : self.change_directory())
+        # self.directory_changer.grid(row = 1, column = 0, sticky = "we", padx = (5, 0))
+        # self.workshop_generator = ttk.Button(self.panel_package, text = "Generate Workshop package", command = lambda : self.generate_workshop())
+        # self.workshop_generator.grid(row = 1, column = 1, sticky = "we", padx = 5)
+        # self.standalone_generator = ttk.Button(self.panel_package, text = "Generate standalone package", command = lambda : self.generate_standalone())
+        # self.standalone_generator.grid(row = 1, column = 2, sticky = "we", padx = (0, 5), pady = 5)
+        # self.panel_package.columnconfigure(0, weight = 1)
+        # self.panel_package.columnconfigure(1, weight = 1)
+        # self.panel_package.columnconfigure(2, weight = 1)
 
-        self.desc_workshop = ttk.Button(self.panel_description, text = "Steam Workshop", command = lambda : self.workshop_description())
-        self.desc_workshop.grid(row = 0, column = 0, sticky = "news", padx = 5, pady = 5)
-        self.desc_forums = ttk.Button(self.panel_description, text = "SCS Forums", command = lambda : self.forums_description())
-        self.desc_forums.grid(row = 1, column = 0, sticky = "news", padx = 5)
-        self.desc_trucky = ttk.Button(self.panel_description, text = "Trucky Mods", command = lambda : self.trucky_description())
-        self.desc_trucky.grid(row = 2, column = 0, sticky = "news", padx = 5, pady = 5)
-        self.desc_plain_text = ttk.Button(self.panel_description, text = "Plain text", command = lambda : self.plain_text_description())
-        self.desc_plain_text.grid(row = 3, column = 0, sticky = "news", padx = 5)
-        self.desc_short = ttk.Button(self.panel_description, text = "Short description", command = lambda : self.short_description())
-        self.desc_short.grid(row = 4, column = 0, sticky = "news", padx = 5, pady = 5)
         self.desc_mod_manager = ttk.Button(self.panel_description, text = "Mod manager", command = lambda : self.mod_manager_description())
-        self.desc_mod_manager.grid(row = 5, column = 0, sticky = "news", padx = 5)
-        self.description_copier = ttk.Button(self.panel_description, text = "Copy to clipboard", command = lambda : self.copy_description())
-        self.description_copier.grid(row = 6, column = 0, sticky = "news", padx = 5, pady = 5)
+        self.desc_mod_manager.grid(row = 0, column = 0, sticky = "news", padx = 5)
+        self.desc_short = ttk.Button(self.panel_description, text = "Short description", command = lambda : self.short_description())
+        self.desc_short.grid(row = 1, column = 0, sticky = "news", padx = 5, pady = 5)
+        self.desc_workshop = ttk.Button(self.panel_description, text = "Steam Workshop", command = lambda : self.workshop_description())
+        self.desc_workshop.grid(row = 2, column = 0, sticky = "news", padx = 5, pady = 5)
+        self.desc_forums = ttk.Button(self.panel_description, text = "SCS Forums", command = lambda : self.forums_description())
+        self.desc_forums.grid(row = 3, column = 0, sticky = "news", padx = 5)
+        self.desc_trucky = ttk.Button(self.panel_description, text = "Trucky Mod Hub", command = lambda : self.trucky_description())
+        self.desc_trucky.grid(row = 4, column = 0, sticky = "news", padx = 5, pady = 5)
+        self.desc_plain_text = ttk.Button(self.panel_description, text = "Plain text", command = lambda : self.plain_text_description())
+        self.desc_plain_text.grid(row = 5, column = 0, sticky = "news", padx = 5)
+        # self.description_copier = ttk.Button(self.panel_description, text = "Copy to clipboard", command = lambda : self.copy_description())
+        # self.description_copier.grid(row = 6, column = 0, sticky = "news", padx = 5, pady = 5)
         self.description_output = tk.Text(self.panel_description)
         self.description_output.grid(row = 0, rowspan = 7, column = 1, sticky = "news", padx = (0,5), pady = 5)
         self.panel_description.columnconfigure(0, weight = 1)
@@ -164,11 +164,11 @@ class TrackerApp:
         if new_directory != "":
             self.variable_directory.set(new_directory)
 
-    def generate_workshop(self, *args):
-        pass
-
-    def generate_standalone(self, *args):
-        pass
+    # def generate_workshop(self, *args):
+    #     pass
+    #
+    # def generate_standalone(self, *args):
+    #     pass
 
     def workshop_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
@@ -378,7 +378,24 @@ class TrackerApp:
         self.description_output.insert("1.0", desc)
 
     def short_description(self, *args):
-        pass
+        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
+        desc = ""
+        desc += "A pack of {} paintjobs supporting ".format(desc_vars.mod_name.replace(" Paintjob Pack", ""))
+        if desc_vars.bus_pack:
+            desc += "{} buses".format(len(desc_vars.truck_mods))
+        else:
+            total_trucks = len(desc_vars.trucks) + len(desc_vars.truck_mods)
+            total_trailers = len(desc_vars.trailers) + len(desc_vars.trailer_mods)
+            if total_trucks >= 1 and total_trailers >= 1:
+                desc += "{} trucks and {} trailers".format(total_trucks, total_trailers)
+            elif total_trucks >= 1:
+                desc += "{} trucks".format(total_trucks)
+            elif total_trailers >= 1:
+                desc += "{} trailers".format(total_trailers)
+        if len(desc_vars.paintjobs) >= 1:
+            desc += ", with {} different paintjobs".format(len(desc_vars.paintjobs))
+        self.description_output.delete("1.0", "end")
+        self.description_output.insert("1.0", desc)
 
     def mod_manager_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
@@ -423,8 +440,8 @@ class TrackerApp:
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
 
-    def copy_description(self, *args):
-        pass
+    # def copy_description(self, *args):
+    #     pass
 
 def main():
     root = tk.Tk()
