@@ -4,9 +4,18 @@ import configparser, os
 
 vehicle_directory = "D:/Documents/GitHub/paintjob-packer/library/vehicles"
 
+image_paintjobs_included = "web.site/paintjobs"
+image_trucks_supported = "web.site/trucks"
+image_trailers_supported = "web.site/trailers"
+image_buses_supported = "web.site/buses"
+image_related_mods = "web.site/related"
+image_enjoy = "web.site/enjoy"
+image_download_sharemods = "web.site/sharemods"
+image_download_workshop = "web.site/workshop"
+image_download_trucky = "web.site/trucky"
+
 class DescVars:
     def __init__(self, game_short, mod_name):
-        print("yeppo")
         selected_ini = configparser.ConfigParser(allow_no_value = True)
         selected_ini.read("{}/{}.ini".format(game_short, mod_name), encoding = "utf-8")
 
@@ -24,6 +33,10 @@ class DescVars:
         self.trailer_mods = []
         for trailer_mod in selected_ini["Pack Info"]["trailer mods"].split(";"):
             self.trailer_mods.append(Vehicle(vehicle_directory, game_short, trailer_mod.split("~")[0]))
+        self.bus_pack = selected_ini["Pack Info"].getboolean("bus pack")
+        self.paintjobs = []
+        if selected_ini["Pack Info"]["paintjobs"] != "":
+            self.paintjobs = selected_ini["Pack Info"]["paintjobs"].split(";")
 
         self.short_description = selected_ini["Description"]["short description"]
         self.more_info = selected_ini["Description"]["more info"]
@@ -37,8 +50,10 @@ class DescVars:
                 related_reason = related_mod.split("~")[1]
                 related_ini = configparser.ConfigParser(allow_no_value = True)
                 related_ini.read("{}/{}.ini".format(game_short, related_name), encoding = "utf-8")
-                related_link = related_ini["Links"]["steam workshop"]
-                self.related_mods.append([related_name, related_reason, related_link])
+                related_workshop_link = related_ini["Links"]["steam workshop"] # [2]
+                related_trucky_link = related_ini["Links"]["trucky"] # [3]
+                related_forums_link = related_ini["Links"]["forums"] # [4]
+                self.related_mods.append([related_name, related_reason, related_workshop_link, related_trucky_link, related_forums_link])
 
         self.workshop_link = selected_ini["Links"]["steam workshop"]
         self.trucky_link = selected_ini["Links"]["trucky"]
@@ -51,10 +66,14 @@ class DescVars:
             other_ini = configparser.ConfigParser(allow_no_value = True)
             other_ini.read("{}/{}.ini".format(self.other_game_short, mod_name), encoding = "utf-8")
             self.other_pack = True
-            self.other_pack_link = other_ini["Links"]["steam workshop"]
+            self.other_pack_workshop_link = other_ini["Links"]["steam workshop"]
+            self.other_pack_trucky_link = other_ini["Links"]["trucky"]
+            self.other_pack_forums_link = other_ini["Links"]["forums"]
         else:
             self.other_pack = False
-            self.other_pack_link = ""
+            self.other_pack_workshop_link = ""
+            self.other_pack_trucky_link = ""
+            self.other_pack_forums_link = ""
 
 class Vehicle:
     def __init__(self, vehicle_directory, game_short, file_name):
@@ -153,30 +172,46 @@ class TrackerApp:
         desc += "[img]{}[/img]\n".format(desc_vars.header_image_link)
         desc += desc_vars.short_description + "\n\n"
         if desc_vars.other_pack:
-            desc += "{} pack available [url={}]here[/url].\n\n".format(desc_vars.other_game, desc_vars.other_pack_link)
-        if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
-            desc += "[img]https://i.imgur.com/ABg8fcT.png[/img]\n" # Trucks supported
-            if len(desc_vars.trucks) >= 1:
-                for veh in desc_vars.trucks:
-                    desc += veh.name + "\n"
-            if len(desc_vars.truck_mods) >= 1:
-                for veh in desc_vars.truck_mods:
-                    desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
+            desc += "{} pack available [url={}]here[/url].\n\n".format(desc_vars.other_game, desc_vars.other_pack_workshop_link)
+        if len(desc_vars.paintjobs) >= 1:
+            desc += "[img]{}[/img]\n".format(image_paintjobs_included)
+            for pj in desc_vars.paintjobs:
+                desc += pj + "\n"
             desc += "\n"
-        if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
-            desc += "[img]https://i.imgur.com/8LOZTds.png[/img]\n" # Trailers supported
-            if len(desc_vars.trailers) >= 1:
-                for veh in desc_vars.trailers:
-                    desc += veh.name + "\n"
-            if len(desc_vars.trailer_mods) >= 1:
-                for veh in desc_vars.trailer_mods:
-                    desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
+        if desc_vars.bus_pack:
+            desc += "[img]{}[/img]\n".format(image_buses_supported)
+            for veh in desc_vars.truck_mods:
+                desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
             desc += "\n"
+        else:
+            if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
+                desc += "[img]{}[/img]\n".format(image_trucks_supported)
+                if len(desc_vars.trucks) >= 1:
+                    for veh in desc_vars.trucks:
+                        desc += veh.name + "\n"
+                if len(desc_vars.truck_mods) >= 1:
+                    for veh in desc_vars.truck_mods:
+                        desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
+                desc += "\n"
+            if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
+                desc += "[img]{}[/img]\n".format(image_trailers_supported)
+                if len(desc_vars.trailers) >= 1:
+                    for veh in desc_vars.trailers:
+                        desc += veh.name + "\n"
+                if len(desc_vars.trailer_mods) >= 1:
+                    for veh in desc_vars.trailer_mods:
+                        desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
+                desc += "\n"
         if desc_vars.more_info != "":
             desc += desc_vars.more_info + "\n\n"
-        desc += "[img]https://i.imgur.com/fFvfTLF.png[/img]\n" # Enjoy! :)
+        if len(desc_vars.related_mods) >= 1:
+            desc += "[img]{}[/img]\n".format(image_related_mods)
+            for rel in desc_vars.related_mods:
+                desc += "[url={}]{}[/url] - {}\n".format(rel[2], rel[0], rel[1])
+            desc += "\n"
+        desc += "[img]{}[/img]\n".format(image_enjoy)
         desc += "Please don't reupload my mods to other sites. They're already available elsewhere, if you'd like to download them directly. Thanks :)\n\n"
-        desc += "You can [url=https://steamcommunity.com/id/carsmaniac/myworkshopfiles/]follow me on the Workshop[/url] to see more!\n"
+        desc += "You can [url=https://steamcommunity.com/id/carsmaniac/myworkshopfiles/]follow me on the Workshop[/url] to see more!"
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
 
@@ -188,36 +223,105 @@ class TrackerApp:
         desc += "[img]{}[/img]\n".format(desc_vars.header_image_link)
         desc += desc_vars.short_description + "\n\n"
         if desc_vars.other_pack:
-            desc += "{} pack available [url={}]here[/url].\n\n".format(desc_vars.other_game, desc_vars.other_pack_link)
-        if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
-            desc += "[img]https://i.imgur.com/ABg8fcT.png[/img]\n" # Trucks supported
+            desc += "{} pack available [url={}]here[/url].\n\n".format(desc_vars.other_game, desc_vars.other_pack_forums_link)
+        if len(desc_vars.paintjobs) >= 1:
+            desc += "[img]{}[/img]\n".format(image_paintjobs_included)
+            for pj in desc_vars.paintjobs:
+                desc += pj + "\n"
+            desc += "\n"
+        if desc_vars.bus_pack:
+            desc += "[img]{}[/img]\n".format(image_buses_supported)
             desc += "[list]\n"
-            if len(desc_vars.trucks) >= 1:
-                for veh in desc_vars.trucks:
-                    desc += "[*]{}\n".format(veh.name)
-            if len(desc_vars.truck_mods) >= 1:
-                for veh in desc_vars.truck_mods:
-                    desc += "[*]{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
+            for veh in desc_vars.truck_mods:
+                desc += "[*]{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
             desc += "[/list]\n\n"
-        if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
-            desc += "[img]https://i.imgur.com/8LOZTds.png[/img]\n" # Trailers supported
-            desc += "[list]\n"
-            if len(desc_vars.trailers) >= 1:
-                for veh in desc_vars.trailers:
-                    desc += "[*]{}\n".format(veh.name)
-            if len(desc_vars.trailer_mods) >= 1:
-                for veh in desc_vars.trailer_mods:
-                    desc += "[*]{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
-            desc += "[/list]\n\n"
+        else:
+            if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
+                desc += "[img]{}[/img]\n".format(image_trucks_supported)
+                desc += "[list]\n"
+                if len(desc_vars.trucks) >= 1:
+                    for veh in desc_vars.trucks:
+                        desc += "[*]{}\n".format(veh.name)
+                if len(desc_vars.truck_mods) >= 1:
+                    for veh in desc_vars.truck_mods:
+                        desc += "[*]{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
+                desc += "[/list]\n\n"
+            if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
+                desc += "[img]{}[/img]\n".format(image_trailers_supported)
+                desc += "[list]\n"
+                if len(desc_vars.trailers) >= 1:
+                    for veh in desc_vars.trailers:
+                        desc += "[*]{}\n".format(veh.name)
+                if len(desc_vars.trailer_mods) >= 1:
+                    for veh in desc_vars.trailer_mods:
+                        desc += "[*]{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
+                desc += "[/list]\n\n"
         if desc_vars.more_info != "":
             desc += desc_vars.more_info + "\n\n"
-        desc += "[url={}][img]130x71[/img][/url] [url={}][img]130x71[/img][/url] [url={}][img]130x71[/img][/url]\n".format(desc_vars.sharemods_link, desc_vars.workshop_link, desc_vars.trucky_link) # Download buttons
-        desc += "[size=85]Please don't reupload my mods. Thanks :)[/size]\n"
+        if len(desc_vars.related_mods) >= 1:
+            desc += "[img]{}[/img]\n".format(image_related_mods)
+            desc += "[list]\n"
+            for rel in desc_vars.related_mods:
+                desc += "[*][url={}]{}[/url] - {}\n".format(rel[4], rel[0], rel[1])
+            desc += "[/list]\n\n"
+        desc += "[url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url]\n".format(desc_vars.sharemods_link, image_download_sharemods, desc_vars.workshop_link, image_download_workshop, desc_vars.trucky_link, image_download_trucky)
+        desc += "[size=85]Please don't reupload my mods. Thanks :)[/size]"
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
 
     def trucky_description(self, *args):
-        pass
+        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
+        desc = ""
+        desc += "<div style=\"max-width: 650px\">\n"
+        desc += "    <img src=\"{}\" style=\"padding-bottom: 5px\">\n".format(desc_vars.header_image_link)
+        desc += "    <p>{}</p>\n".format(desc_vars.short_description)
+        if desc_vars.other_pack:
+            desc += "    <p>{} pack available <a style=\"color: white; text-decoration: underline\" href=\"{}\">here</a>.</p>\n".format(desc_vars.other_game, desc_vars.other_pack_trucky_link)
+        if len(desc_vars.paintjobs) >= 1:
+            desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Paintjobs included</p>\n"
+            desc += "    <ul style=\"list-style: none; padding-left: 15px\">\n"
+            for pj in desc_vars.paintjobs:
+                desc += "        <li>{}</li>\n".format(pj)
+            desc += "    </ul>\n"
+        if desc_vars.bus_pack:
+            desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Buses supported</p>\n"
+            desc += "    <ul>\n"
+            for veh in desc_vars.truck_mods:
+                desc += "        <li>{}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link, veh.name)
+            desc += "    </ul>\n"
+        else:
+            if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
+                desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Trucks supported</p>\n"
+                desc += "    <ul>\n"
+                if len(desc_vars.trucks) >= 1:
+                    for veh in desc_vars.trucks:
+                        desc += "        <li>{}</li>\n".format(veh.name)
+                if len(desc_vars.truck_mods) >= 1:
+                    for veh in desc_vars.truck_mods:
+                        desc += "        <li>{}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link, veh.name)
+                desc += "    </ul>\n"
+            if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
+                desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Trailers supported</p>\n"
+                desc += "    <ul>\n"
+                if len(desc_vars.trailers) >= 1:
+                    for veh in desc_vars.trailers:
+                        desc += "        <li>{}</li>\n".format(veh.name)
+                if len(desc_vars.trailer_mods) >= 1:
+                    for veh in desc_vars.trailer_mods:
+                        desc += "        <li>{}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link, veh.name)
+                desc += "    </ul>\n"
+        if desc_vars.more_info != "":
+            desc += "    <p>{}</p>".format(desc_vars.more_info)
+        if len(desc_vars.related_mods) >= 1:
+            desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Related mods</p>\n"
+            desc += "    <ul>\n"
+            for rel in desc_vars.related_mods:
+                desc += "        <li><a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a> - {}</li>\n".format(rel[3], rel[0], rel[1])
+            desc += "    </ul>\n"
+        desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Enjoy! :)</p>\n"
+        desc += "</div>"
+        self.description_output.delete("1.0", "end")
+        self.description_output.insert("1.0", desc)
 
     def plain_text_description(self, *args):
         pass
