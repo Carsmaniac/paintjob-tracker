@@ -1,22 +1,24 @@
 import tkinter as tk
-from tkinter import ttk, filedialog
-import configparser, os
+from tkinter import ttk
+from tkinter import filedialog
+import configparser
+import os
 
 vehicle_directory = "D:/Documents/GitHub/paintjob-packer/library/vehicles"
 
-image_paintjobs_included = "web.site/paintjobs"
-image_trucks_supported = "web.site/trucks"
-image_trailers_supported = "web.site/trailers"
-image_buses_supported = "web.site/buses"
-image_related_mods = "web.site/related"
-image_enjoy = "web.site/enjoy"
-image_download_sharemods = "web.site/sharemods"
-image_download_modsbase = "web.site/modsbase"
-image_download_workshop = "web.site/workshop"
-image_download_trucky = "web.site/trucky"
-bus_resources_forums = "bus.stuff/forums"
-bus_resources_workshop = "bus.stuff/workshop"
-bus_resources_trucky = "bus.stuff/trucky"
+IMAGE_PAINTJOBS_INCLUDED = "web.site/paintjobs"
+IMAGE_TRUCKS_SUPPORTED = "web.site/trucks"
+IMAGE_TRAILERS_SUPPORTED = "web.site/trailers"
+IMAGE_BUSES_SUPPORTED = "web.site/buses"
+IMAGE_RELATED_MODS = "web.site/related"
+IMAGE_ENJOY = "web.site/enjoy"
+IMAGE_DOWNLOAD_SHAREMODS = "web.site/sharemods"
+IMAGE_DOWNLOAD_MODSBASE = "web.site/modsbase"
+IMAGE_DOWNLOAD_WORKSHOP = "web.site/workshop"
+IMAGE_DOWNLOAD_TRUCKY = "web.site/trucky"
+BUS_RESOURCES_FORUMs = "bus.stuff/forums"
+BUS_RESOURCES_WORKSHOP = "bus.stuff/workshop"
+BUS_RESOURCES_TRUCKY = "bus.stuff/trucky"
 
 class DescVars:
     def __init__(self, game_short, mod_name):
@@ -178,22 +180,22 @@ class TrackerApp:
         desc += "[img]{}[/img]\n".format(desc_vars.header_image_link)
         desc += desc_vars.short_description + "\n\n"
         if desc_vars.bus_pack:
-            desc += "[b]This mod requires my [url={}]bus resource pack[/url] to work![/b]\n\n".format(bus_resources_workshop)
+            desc += "[b]This mod requires my [url={}]bus resource pack[/url] to work![/b]\n\n".format(BUS_RESOURCES_WORKSHOP)
         if desc_vars.other_pack:
             desc += "{} pack available [url={}]here[/url].\n\n".format(desc_vars.other_game, desc_vars.other_pack_workshop_link)
         if len(desc_vars.paintjobs) >= 1:
-            desc += "[img]{}[/img]\n".format(image_paintjobs_included)
+            desc += "[img]{}[/img]\n".format(IMAGE_PAINTJOBS_INCLUDED)
             for pj in desc_vars.paintjobs:
                 desc += pj + "\n"
             desc += "\n"
         if desc_vars.bus_pack:
-            desc += "[img]{}[/img]\n".format(image_buses_supported)
+            desc += "[img]{}[/img]\n".format(IMAGE_BUSES_SUPPORTED)
             for veh in desc_vars.truck_mods:
                 desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
             desc += "\n"
         else:
             if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
-                desc += "[img]{}[/img]\n".format(image_trucks_supported)
+                desc += "[img]{}[/img]\n".format(IMAGE_TRUCKS_SUPPORTED)
                 if len(desc_vars.trucks) >= 1:
                     for veh in desc_vars.trucks:
                         desc += veh.name + "\n"
@@ -202,7 +204,7 @@ class TrackerApp:
                         desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
                 desc += "\n"
             if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
-                desc += "[img]{}[/img]\n".format(image_trailers_supported)
+                desc += "[img]{}[/img]\n".format(IMAGE_TRAILERS_SUPPORTED)
                 if len(desc_vars.trailers) >= 1:
                     for veh in desc_vars.trailers:
                         desc += veh.name + "\n"
@@ -213,11 +215,11 @@ class TrackerApp:
         if desc_vars.more_info != "":
             desc += desc_vars.more_info + "\n\n"
         if len(desc_vars.related_mods) >= 1:
-            desc += "[img]{}[/img]\n".format(image_related_mods)
+            desc += "[img]{}[/img]\n".format(IMAGE_RELATED_MODS)
             for rel in desc_vars.related_mods:
                 desc += "[url={}]{}[/url] - {}\n".format(rel[2], rel[0], rel[1])
             desc += "\n"
-        desc += "[img]{}[/img]\n".format(image_enjoy)
+        desc += "[img]{}[/img]\n".format(IMAGE_ENJOY)
         desc += "Please don't reupload my mods to other sites. They're already available elsewhere, if you'd like to download them directly. Thanks :)\n\n"
         desc += "You can [url=https://steamcommunity.com/id/carsmaniac/myworkshopfiles/]follow me on the Workshop[/url] to see more!"
         self.description_output.delete("1.0", "end")
@@ -231,23 +233,23 @@ class TrackerApp:
         desc += "[img]{}[/img]\n".format(desc_vars.header_image_link)
         desc += desc_vars.short_description + "\n\n"
         if desc_vars.bus_pack:
-            desc += "[b]This mod requires my [url={}]bus resource pack[/url] to work![/b]\n\n".format(bus_resources_forums)
+            desc += "[b]This mod requires my [url={}]bus resource pack[/url] to work![/b]\n\n".format(BUS_RESOURCES_FORUMs)
         if desc_vars.other_pack:
             desc += "{} pack available [url={}]here[/url].\n\n".format(desc_vars.other_game, desc_vars.other_pack_forums_link)
         if len(desc_vars.paintjobs) >= 1:
-            desc += "[img]{}[/img]\n".format(image_paintjobs_included)
+            desc += "[img]{}[/img]\n".format(IMAGE_PAINTJOBS_INCLUDED)
             for pj in desc_vars.paintjobs:
                 desc += pj + "\n"
             desc += "\n"
         if desc_vars.bus_pack:
-            desc += "[img]{}[/img]\n".format(image_buses_supported)
+            desc += "[img]{}[/img]\n".format(IMAGE_BUSES_SUPPORTED)
             desc += "[list]\n"
             for veh in desc_vars.truck_mods:
                 desc += "[*]{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
             desc += "[/list]\n\n"
         else:
             if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
-                desc += "[img]{}[/img]\n".format(image_trucks_supported)
+                desc += "[img]{}[/img]\n".format(IMAGE_TRUCKS_SUPPORTED)
                 desc += "[list]\n"
                 if len(desc_vars.trucks) >= 1:
                     for veh in desc_vars.trucks:
@@ -257,7 +259,7 @@ class TrackerApp:
                         desc += "[*]{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
                 desc += "[/list]\n\n"
             if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
-                desc += "[img]{}[/img]\n".format(image_trailers_supported)
+                desc += "[img]{}[/img]\n".format(IMAGE_TRAILERS_SUPPORTED)
                 desc += "[list]\n"
                 if len(desc_vars.trailers) >= 1:
                     for veh in desc_vars.trailers:
@@ -269,12 +271,12 @@ class TrackerApp:
         if desc_vars.more_info != "":
             desc += desc_vars.more_info + "\n\n"
         if len(desc_vars.related_mods) >= 1:
-            desc += "[img]{}[/img]\n".format(image_related_mods)
+            desc += "[img]{}[/img]\n".format(IMAGE_RELATED_MODS)
             desc += "[list]\n"
             for rel in desc_vars.related_mods:
                 desc += "[*][url={}]{}[/url] - {}\n".format(rel[4], rel[0], rel[1])
             desc += "[/list]\n\n"
-        desc += "[url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url]\n".format(desc_vars.sharemods_link, image_download_sharemods, desc_vars.modsbase_link, image_download_modsbase, desc_vars.workshop_link, image_download_workshop, desc_vars.trucky_link, image_download_trucky)
+        desc += "[url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url]\n".format(desc_vars.sharemods_link, IMAGE_DOWNLOAD_SHAREMODS, desc_vars.modsbase_link, IMAGE_DOWNLOAD_MODSBASE, desc_vars.workshop_link, IMAGE_DOWNLOAD_WORKSHOP, desc_vars.trucky_link, IMAGE_DOWNLOAD_TRUCKY)
         desc += "[size=85]Please don't reupload my mods. Thanks :)[/size]"
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
@@ -286,7 +288,7 @@ class TrackerApp:
         desc += "    <img src=\"{}\" style=\"padding-bottom: 5px\">\n".format(desc_vars.header_image_link)
         desc += "    <p>{}</p>\n".format(desc_vars.short_description)
         if desc_vars.bus_pack:
-            desc += "    <p style=\"font-weight: 700\">This mod requires my <a style=\"color: white; text-decoration: underline\" href=\"{}\">bus resource pack</a>to work!</p>\n".format(bus_resources_trucky)
+            desc += "    <p style=\"font-weight: 700\">This mod requires my <a style=\"color: white; text-decoration: underline\" href=\"{}\">bus resource pack</a>to work!</p>\n".format(BUS_RESOURCES_TRUCKY)
         if desc_vars.other_pack:
             desc += "    <p>{} pack available <a style=\"color: white; text-decoration: underline\" href=\"{}\">here</a>.</p>\n".format(desc_vars.other_game, desc_vars.other_pack_trucky_link)
         if len(desc_vars.paintjobs) >= 1:
@@ -341,7 +343,7 @@ class TrackerApp:
         desc += desc_vars.short_description + "\n\n"
         if desc_vars.bus_pack:
             desc += ">> This mod requires my bus resource pack to work! <<\n"
-            desc += "Download it here: {}\n\n".format(bus_resources_forums)
+            desc += "Download it here: {}\n\n".format(BUS_RESOURCES_FORUMs)
         if len(desc_vars.paintjobs) >= 1:
             desc += "Paintjobs included:\n"
             for pj in desc_vars.paintjobs:
