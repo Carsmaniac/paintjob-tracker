@@ -32,13 +32,13 @@ class DescVars:
             self.trucks.append(Vehicle(vehicle_directory, game_short, truck))
         self.truck_mods = []
         for truck_mod in selected_ini["pack info"]["truck mods"].split(";"):
-            self.truck_mods.append(Vehicle(vehicle_directory, game_short, truck_mod.split("~")[0]))
+            self.truck_mods.append(Vehicle(vehicle_directory, game_short, truck_mod))
         self.trailers = []
         for trailer in selected_ini["pack info"]["trailers"].split(";"):
             self.trailers.append(Vehicle(vehicle_directory, game_short, trailer))
         self.trailer_mods = []
         for trailer_mod in selected_ini["pack info"]["trailer mods"].split(";"):
-            self.trailer_mods.append(Vehicle(vehicle_directory, game_short, trailer_mod.split("~")[0]))
+            self.trailer_mods.append(Vehicle(vehicle_directory, game_short, trailer_mod))
         self.bus_pack = selected_ini["pack info"].getboolean("bus pack")
         self.paintjobs = []
         if selected_ini["pack info"]["paintjobs"] != "":
@@ -52,8 +52,8 @@ class DescVars:
         self.related_mods = []
         if selected_ini["description"]["related mods"] != "":
             for related_mod in selected_ini["description"]["related mods"].split(";"):
-                related_name = related_mod.split("~")[0]
-                related_reason = related_mod.split("~")[1]
+                related_name = related_mod.split("/")[0]
+                related_reason = related_mod.split("/")[1]
                 related_ini = configparser.ConfigParser(allow_no_value = True)
                 related_ini.read("{}/{}.ini".format(game_short, related_name), encoding = "utf-8")
                 related_workshop_link = related_ini["links"]["steam workshop"] # [2]
@@ -91,7 +91,28 @@ class Vehicle:
         self.trailer = config["vehicle info"].getboolean("trailer")
         self.mod = config["vehicle info"].getboolean("mod")
         self.mod_author = config["vehicle info"]["mod author"]
-        self.mod_link = config["vehicle info"]["mod link"]
+        self.mod_link_workshop = config["vehicle info"]["mod link workshop"]
+        self.mod_link_forums = config["vehicle info"]["mod link forums"]
+        self.mod_link_author_site = config["vehicle info"]["mod link author site"]
+        # self.mod_link_trucky = config["vehicle info"]["mod link trucky"]
+        self.mod_link_trucky = ""
+
+    def mod_link(self, _priority):
+        priority = list(_priority)
+        for i in range(4):
+            if priority[i] == "w":
+                priority[i] = self.mod_link_workshop
+            elif priority[i] == "f":
+                priority[i] = self.mod_link_forums
+            elif priority[i] == "a":
+                priority[i] = self.mod_link_author_site
+            elif priority[i] == "t":
+                priority[i] = self.mod_link_trucky
+        mod_link = None
+        for link in priority:
+            if link != "" and mod_link == None:
+                mod_link = link # only chooses the first non-blank mod link
+        return(mod_link)
 
 class TrackerApp:
     def __init__(self, master):
@@ -168,12 +189,6 @@ class TrackerApp:
         if new_directory != "":
             self.variable_directory.set(new_directory)
 
-    # def generate_workshop(self, *args):
-    #     pass
-    #
-    # def generate_standalone(self, *args):
-    #     pass
-
     def workshop_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
         desc = ""
@@ -191,7 +206,7 @@ class TrackerApp:
         if desc_vars.bus_pack:
             desc += "[img]{}[/img]\n".format(IMAGE_BUSES_SUPPORTED)
             for veh in desc_vars.truck_mods:
-                desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
+                desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
             desc += "\n"
         else:
             if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
@@ -201,7 +216,7 @@ class TrackerApp:
                         desc += veh.name + "\n"
                 if len(desc_vars.truck_mods) >= 1:
                     for veh in desc_vars.truck_mods:
-                        desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
+                        desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
                 desc += "\n"
             if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
                 desc += "[img]{}[/img]\n".format(IMAGE_TRAILERS_SUPPORTED)
@@ -210,7 +225,7 @@ class TrackerApp:
                         desc += veh.name + "\n"
                 if len(desc_vars.trailer_mods) >= 1:
                     for veh in desc_vars.trailer_mods:
-                        desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
+                        desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
                 desc += "\n"
         if desc_vars.more_info != "":
             desc += desc_vars.more_info + "\n\n"
@@ -245,7 +260,7 @@ class TrackerApp:
             desc += "[img]{}[/img]\n".format(IMAGE_BUSES_SUPPORTED)
             desc += "[list]\n"
             for veh in desc_vars.truck_mods:
-                desc += "[*]{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
+                desc += "[*]{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("fwta"), veh.name)
             desc += "[/list]\n\n"
         else:
             if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
@@ -256,7 +271,7 @@ class TrackerApp:
                         desc += "[*]{}\n".format(veh.name)
                 if len(desc_vars.truck_mods) >= 1:
                     for veh in desc_vars.truck_mods:
-                        desc += "[*]{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
+                        desc += "[*]{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("fwta"), veh.name)
                 desc += "[/list]\n\n"
             if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
                 desc += "[img]{}[/img]\n".format(IMAGE_TRAILERS_SUPPORTED)
@@ -266,7 +281,7 @@ class TrackerApp:
                         desc += "[*]{}\n".format(veh.name)
                 if len(desc_vars.trailer_mods) >= 1:
                     for veh in desc_vars.trailer_mods:
-                        desc += "[*]{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link, veh.name)
+                        desc += "[*]{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("fwta"), veh.name)
                 desc += "[/list]\n\n"
         if desc_vars.more_info != "":
             desc += desc_vars.more_info + "\n\n"
@@ -301,7 +316,7 @@ class TrackerApp:
             desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Buses supported</p>\n"
             desc += "    <ul>\n"
             for veh in desc_vars.truck_mods:
-                desc += "        <li>{}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link, veh.name)
+                desc += "        <li>{}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link("tfaw"), veh.name)
             desc += "    </ul>\n"
         else:
             if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
@@ -312,7 +327,7 @@ class TrackerApp:
                         desc += "        <li>{}</li>\n".format(veh.name)
                 if len(desc_vars.truck_mods) >= 1:
                     for veh in desc_vars.truck_mods:
-                        desc += "        <li>{}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link, veh.name)
+                        desc += "        <li>{}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link("tfaw"), veh.name)
                 desc += "    </ul>\n"
             if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
                 desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Trailers supported</p>\n"
@@ -322,7 +337,7 @@ class TrackerApp:
                         desc += "        <li>{}</li>\n".format(veh.name)
                 if len(desc_vars.trailer_mods) >= 1:
                     for veh in desc_vars.trailer_mods:
-                        desc += "        <li>{}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link, veh.name)
+                        desc += "        <li>{}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link("tfaw"), veh.name)
                 desc += "    </ul>\n"
         if desc_vars.more_info != "":
             desc += "    <p>{}</p>".format(desc_vars.more_info)
