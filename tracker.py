@@ -11,6 +11,7 @@ image_buses_supported = "web.site/buses"
 image_related_mods = "web.site/related"
 image_enjoy = "web.site/enjoy"
 image_download_sharemods = "web.site/sharemods"
+image_download_modsbase = "web.site/modsbase"
 image_download_workshop = "web.site/workshop"
 image_download_trucky = "web.site/trucky"
 bus_resources_forums = "bus.stuff/forums"
@@ -61,6 +62,7 @@ class DescVars:
         self.workshop_link = selected_ini["Links"]["steam workshop"]
         self.trucky_link = selected_ini["Links"]["trucky"]
         self.sharemods_link = selected_ini["Links"]["sharemods"]
+        self.modsbase_link = selected_ini["Links"]["modsbase"]
         self.forums_link = selected_ini["Links"]["forums"]
 
         self.other_game_dict = {"ats":["ets", "Euro Truck Simulator 2"], "ets":["ats", "American Truck Simulator"]}
@@ -126,9 +128,9 @@ class TrackerApp:
         # self.panel_package.columnconfigure(2, weight = 1)
 
         self.desc_mod_manager = ttk.Button(self.panel_description, text = "Mod manager", command = lambda : self.mod_manager_description())
-        self.desc_mod_manager.grid(row = 0, column = 0, sticky = "news", padx = 5)
+        self.desc_mod_manager.grid(row = 0, column = 0, sticky = "news", padx = 5, pady = 5)
         self.desc_short = ttk.Button(self.panel_description, text = "Short description", command = lambda : self.short_description())
-        self.desc_short.grid(row = 1, column = 0, sticky = "news", padx = 5, pady = 5)
+        self.desc_short.grid(row = 1, column = 0, sticky = "news", padx = 5)
         self.desc_workshop = ttk.Button(self.panel_description, text = "Steam Workshop", command = lambda : self.workshop_description())
         self.desc_workshop.grid(row = 2, column = 0, sticky = "news", padx = 5, pady = 5)
         self.desc_forums = ttk.Button(self.panel_description, text = "SCS Forums", command = lambda : self.forums_description())
@@ -136,11 +138,11 @@ class TrackerApp:
         self.desc_trucky = ttk.Button(self.panel_description, text = "Trucky Mod Hub", command = lambda : self.trucky_description())
         self.desc_trucky.grid(row = 4, column = 0, sticky = "news", padx = 5, pady = 5)
         self.desc_plain_text = ttk.Button(self.panel_description, text = "Plain text", command = lambda : self.plain_text_description())
-        self.desc_plain_text.grid(row = 5, column = 0, sticky = "news", padx = 5)
+        self.desc_plain_text.grid(row = 5, column = 0, sticky = "news", padx = 5, pady = (0, 5))
         # self.description_copier = ttk.Button(self.panel_description, text = "Copy to clipboard", command = lambda : self.copy_description())
         # self.description_copier.grid(row = 6, column = 0, sticky = "news", padx = 5, pady = 5)
         self.description_output = tk.Text(self.panel_description)
-        self.description_output.grid(row = 0, rowspan = 7, column = 1, sticky = "news", padx = (0,5), pady = 5)
+        self.description_output.grid(row = 0, rowspan = 6, column = 1, sticky = "news", padx = (0,5), pady = 5)
         self.panel_description.columnconfigure(0, weight = 1)
         self.panel_description.columnconfigure(1, weight = 4)
 
@@ -272,7 +274,7 @@ class TrackerApp:
             for rel in desc_vars.related_mods:
                 desc += "[*][url={}]{}[/url] - {}\n".format(rel[4], rel[0], rel[1])
             desc += "[/list]\n\n"
-        desc += "[url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url]\n".format(desc_vars.sharemods_link, image_download_sharemods, desc_vars.workshop_link, image_download_workshop, desc_vars.trucky_link, image_download_trucky)
+        desc += "[url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url]\n".format(desc_vars.sharemods_link, image_download_sharemods, desc_vars.modsbase_link, image_download_modsbase, desc_vars.workshop_link, image_download_workshop, desc_vars.trucky_link, image_download_trucky)
         desc += "[size=85]Please don't reupload my mods. Thanks :)[/size]"
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
