@@ -28,44 +28,44 @@ class DescVars:
         self.mod_name = mod_name
 
         self.trucks = []
-        for truck in selected_ini["Pack Info"]["trucks"].split(";"):
+        for truck in selected_ini["pack info"]["trucks"].split(";"):
             self.trucks.append(Vehicle(vehicle_directory, game_short, truck))
         self.truck_mods = []
-        for truck_mod in selected_ini["Pack Info"]["truck mods"].split(";"):
+        for truck_mod in selected_ini["pack info"]["truck mods"].split(";"):
             self.truck_mods.append(Vehicle(vehicle_directory, game_short, truck_mod.split("~")[0]))
         self.trailers = []
-        for trailer in selected_ini["Pack Info"]["trailers"].split(";"):
+        for trailer in selected_ini["pack info"]["trailers"].split(";"):
             self.trailers.append(Vehicle(vehicle_directory, game_short, trailer))
         self.trailer_mods = []
-        for trailer_mod in selected_ini["Pack Info"]["trailer mods"].split(";"):
+        for trailer_mod in selected_ini["pack info"]["trailer mods"].split(";"):
             self.trailer_mods.append(Vehicle(vehicle_directory, game_short, trailer_mod.split("~")[0]))
-        self.bus_pack = selected_ini["Pack Info"].getboolean("bus pack")
+        self.bus_pack = selected_ini["pack info"].getboolean("bus pack")
         self.paintjobs = []
-        if selected_ini["Pack Info"]["paintjobs"] != "":
-            self.paintjobs = selected_ini["Pack Info"]["paintjobs"].split(";")
+        if selected_ini["pack info"]["paintjobs"] != "":
+            self.paintjobs = selected_ini["pack info"]["paintjobs"].split(";")
 
-        self.short_description = selected_ini["Description"]["short description"]
-        self.more_info = selected_ini["Description"]["more info"]
-        self.header_image_link = selected_ini["Description"]["header image link"]
-        self.forums_screenshot_image_link = selected_ini["Description"]["forums screenshot image link"]
+        self.short_description = selected_ini["description"]["short description"]
+        self.more_info = selected_ini["description"]["more info"]
+        self.header_image_link = selected_ini["description"]["header image link"]
+        self.forums_screenshot_image_link = selected_ini["description"]["forums screenshot image link"]
 
         self.related_mods = []
-        if selected_ini["Description"]["related mods"] != "":
-            for related_mod in selected_ini["Description"]["related mods"].split(";"):
+        if selected_ini["description"]["related mods"] != "":
+            for related_mod in selected_ini["description"]["related mods"].split(";"):
                 related_name = related_mod.split("~")[0]
                 related_reason = related_mod.split("~")[1]
                 related_ini = configparser.ConfigParser(allow_no_value = True)
                 related_ini.read("{}/{}.ini".format(game_short, related_name), encoding = "utf-8")
-                related_workshop_link = related_ini["Links"]["steam workshop"] # [2]
-                related_trucky_link = related_ini["Links"]["trucky"] # [3]
-                related_forums_link = related_ini["Links"]["forums"] # [4]
+                related_workshop_link = related_ini["links"]["steam workshop"] # [2]
+                related_trucky_link = related_ini["links"]["trucky"] # [3]
+                related_forums_link = related_ini["links"]["forums"] # [4]
                 self.related_mods.append([related_name, related_reason, related_workshop_link, related_trucky_link, related_forums_link])
 
-        self.workshop_link = selected_ini["Links"]["steam workshop"]
-        self.trucky_link = selected_ini["Links"]["trucky"]
-        self.sharemods_link = selected_ini["Links"]["sharemods"]
-        self.modsbase_link = selected_ini["Links"]["modsbase"]
-        self.forums_link = selected_ini["Links"]["forums"]
+        self.workshop_link = selected_ini["links"]["steam workshop"]
+        self.trucky_link = selected_ini["links"]["trucky"]
+        self.sharemods_link = selected_ini["links"]["sharemods"]
+        self.modsbase_link = selected_ini["links"]["modsbase"]
+        self.forums_link = selected_ini["links"]["forums"]
 
         self.other_game_dict = {"ats":["ets", "Euro Truck Simulator 2"], "ets":["ats", "American Truck Simulator"]}
         self.other_game_short = self.other_game_dict[game_short][0]
@@ -74,9 +74,9 @@ class DescVars:
             other_ini = configparser.ConfigParser(allow_no_value = True)
             other_ini.read("{}/{}.ini".format(self.other_game_short, mod_name), encoding = "utf-8")
             self.other_pack = True
-            self.other_pack_workshop_link = other_ini["Links"]["steam workshop"]
-            self.other_pack_trucky_link = other_ini["Links"]["trucky"]
-            self.other_pack_forums_link = other_ini["Links"]["forums"]
+            self.other_pack_workshop_link = other_ini["links"]["steam workshop"]
+            self.other_pack_trucky_link = other_ini["links"]["trucky"]
+            self.other_pack_forums_link = other_ini["links"]["forums"]
         else:
             self.other_pack = False
             self.other_pack_workshop_link = ""
