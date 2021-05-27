@@ -4,7 +4,7 @@ from tkinter import filedialog
 import configparser
 import os
 
-vehicle_directory = "D:/Documents/GitHub/paintjob-packer/library/vehicles"
+VEHICLE_DIRECTORY = "D:/Documents/GitHub/paintjob-packer/library/vehicles"
 
 IMAGE_PAINTJOBS_INCLUDED = "web.site/paintjobs"
 IMAGE_TRUCKS_SUPPORTED = "web.site/trucks"
@@ -33,19 +33,19 @@ class DescVars:
         self.trucks = []
         for truck in selected_ini["pack info"]["trucks"].split(";"):
             if truck != "":
-                self.trucks.append(Vehicle(vehicle_directory, game_short, truck))
+                self.trucks.append(Vehicle(VEHICLE_DIRECTORY, game_short, truck))
         self.truck_mods = []
         for truck_mod in selected_ini["pack info"]["truck mods"].split(";"):
             if truck_mod != "":
-                self.truck_mods.append(Vehicle(vehicle_directory, game_short, truck_mod))
+                self.truck_mods.append(Vehicle(VEHICLE_DIRECTORY, game_short, truck_mod))
         self.trailers = []
         for trailer in selected_ini["pack info"]["trailers"].split(";"):
             if trailer != "":
-                self.trailers.append(Vehicle(vehicle_directory, game_short, trailer))
+                self.trailers.append(Vehicle(VEHICLE_DIRECTORY, game_short, trailer))
         self.trailer_mods = []
         for trailer_mod in selected_ini["pack info"]["trailer mods"].split(";"):
             if trailer_mod != "":
-                self.trailer_mods.append(Vehicle(vehicle_directory, game_short, trailer_mod))
+                self.trailer_mods.append(Vehicle(VEHICLE_DIRECTORY, game_short, trailer_mod))
         self.bus_pack = selected_ini["pack info"].getboolean("bus pack")
         self.paintjobs = []
         if selected_ini["pack info"]["paintjobs"] != "":
@@ -97,10 +97,11 @@ class DescVars:
         self.changelog = "\n".join(selected_ini["changelog"].keys())
 
 class Vehicle:
-    def __init__(self, vehicle_directory, game_short, file_name):
+    def __init__(self, VEHICLE_DIRECTORY, game_short, file_name):
         config = configparser.ConfigParser(allow_no_value = True)
-        config.read("{}/{}/{}.ini".format(vehicle_directory, game_short, file_name))
+        config.read("{}/{}/{}.ini".format(VEHICLE_DIRECTORY, game_short, file_name))
         self.name = config["vehicle info"]["name"]
+        self.file_name = file_name
         self.trailer = config["vehicle info"].getboolean("trailer")
         self.mod = config["vehicle info"].getboolean("mod")
         self.mod_author = config["vehicle info"]["mod author"]
@@ -257,13 +258,67 @@ class TrackerApp:
         self.variable_selected_mod.set(mod_list[0])
 
     def sort_vehicles(self, *args):
-        print("sort")
-        pass
+        selected_ini = configparser.ConfigParser(allow_no_value = True)
+        selected_ini.optionxform = str
+        selected_ini.read("{}/{}.ini".format(self.game_short, self.variable_selected_mod.get()), encoding = "utf-8")
+
+        trucks = []
+        for truck in selected_ini["pack info"]["trucks"].split(";"):
+            if truck != "":
+                trucks.append(Vehicle(VEHICLE_DIRECTORY, self.game_short, truck))
+        trucks.sort(key = lambda veh: veh.name)
+        truck_mods = []
+        for truck_mod in selected_ini["pack info"]["truck mods"].split(";"):
+            if truck_mod != "":
+                truck_mods.append(Vehicle(VEHICLE_DIRECTORY, self.game_short, truck_mod))
+        truck_mods.sort(key = lambda veh: veh.name)
+        trailers = []
+        for trailer in selected_ini["pack info"]["trailers"].split(";"):
+            if trailer != "":
+                trailers.append(Vehicle(VEHICLE_DIRECTORY, self.game_short, trailer))
+        trailers.sort(key = lambda veh: veh.name)
+        trailer_mods = []
+        for trailer_mod in selected_ini["pack info"]["trailer mods"].split(";"):
+            if trailer_mod != "":
+                trailer_mods.append(Vehicle(VEHICLE_DIRECTORY, self.game_short, trailer_mod))
+        trailer_mods.sort(key = lambda veh: veh.name)
+
+        truck_names = []
+        for veh in trucks:
+            truck_names.append(veh.file_name)
+        truck_names = ";".join(truck_names)
+        trailer_names = []
+        for veh in trailers:
+            trailer_names.append(veh.file_name)
+        trailer_names = ";".join(trailer_names)
+        truck_mod_names = []
+        for veh in truck_mods:
+            truck_mod_names.append(veh.file_name)
+        truck_mod_names = ";".join(truck_mod_names)
+        trailer_mod_names = []
+        for veh in trailer_mods:
+            trailer_mod_names.append(veh.file_name)
+        trailer_mod_names = ";".join(trailer_mod_names)
+
+        selected_ini["pack info"]["trucks"] = truck_names
+        selected_ini["pack info"]["trailers"] = trailer_names
+        selected_ini["pack info"]["truck mods"] = truck_mod_names
+        selected_ini["pack info"]["trailer mods"] = trailer_mod_names
+
+        with open("{}/{}.ini".format(self.game_short, self.variable_selected_mod.get()), "w") as configfile:
+            selected_ini.write(configfile)
 
     def save_pack(self, *args):
         print("save")
         self.editor_changelog_text.get("1.0", "end")
         pass
+        selected_ini.read("{}/{}.ini".format(self.game_short, self.variable_selected_mod.get()), encoding = "utf-8")
+
+        selected_ini["pack info"]["bus pack"] = str(self.editor_bus_pack_variable.get())
+        selected_ini["pack info"]["paintjobs"] = self.editor_paintjobs_text.get("1.0", "end").rstrip().replace("\n", ";")
+
+        selected_ini["description"]["short description"] = self.editor_short_description_text.get("1.0", "end").rstrip().replace("\n", "\\n")
+        selected_ini["description"]["more info"] = self.editor_more_info_text.get("1.0", "end").rstrip().replace("\n", "\\n")
 
     def load_pack(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
