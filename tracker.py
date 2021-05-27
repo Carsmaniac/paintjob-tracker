@@ -3,6 +3,8 @@ from tkinter import ttk
 from tkinter import filedialog
 import configparser
 import os
+import winsound
+import time
 
 VEHICLE_DIRECTORY = "D:/Documents/GitHub/paintjob-packer/library/vehicles"
 
@@ -53,6 +55,7 @@ class DescVars:
 
         self.short_description = selected_ini["description"]["short description"].replace("\\n","\n") # configparser escapes \n, so we need to un-escape it
         self.more_info = selected_ini["description"]["more info"].replace("\\n","\n")
+        self.changelog = selected_ini["description"]["changelog"].replace("\\n","\n")
 
         self.image_header = selected_ini["images"]["header"]
         self.image_showcase = selected_ini["images"]["showcase"]
@@ -93,8 +96,6 @@ class DescVars:
             self.other_pack_trucky_link = ""
             self.other_pack_forums_link = ""
             self.other_pack_modland_link = ""
-
-        self.changelog = "\n".join(selected_ini["changelog"].keys())
 
 class Vehicle:
     def __init__(self, VEHICLE_DIRECTORY, game_short, file_name):
@@ -308,10 +309,13 @@ class TrackerApp:
         with open("{}/{}.ini".format(self.game_short, self.variable_selected_mod.get()), "w") as configfile:
             selected_ini.write(configfile)
 
+        winsound.MessageBeep() # audio confirmation
+        time.sleep(0.12)
+        winsound.MessageBeep()
+
     def save_pack(self, *args):
-        print("save")
-        self.editor_changelog_text.get("1.0", "end")
-        pass
+        selected_ini = configparser.ConfigParser(allow_no_value = True)
+        selected_ini.optionxform = str
         selected_ini.read("{}/{}.ini".format(self.game_short, self.variable_selected_mod.get()), encoding = "utf-8")
 
         selected_ini["pack info"]["bus pack"] = str(self.editor_bus_pack_variable.get())
@@ -319,6 +323,29 @@ class TrackerApp:
 
         selected_ini["description"]["short description"] = self.editor_short_description_text.get("1.0", "end").rstrip().replace("\n", "\\n")
         selected_ini["description"]["more info"] = self.editor_more_info_text.get("1.0", "end").rstrip().replace("\n", "\\n")
+        selected_ini["description"]["related mods"] = self.editor_related_mods_text.get("1.0", "end").rstrip().replace("\n", ";")
+        selected_ini["description"]["changelog"] = self.editor_changelog_text.get("1.0", "end").rstrip().replace("\n", "\\n")
+
+        selected_ini["images"]["header"] = self.editor_header_variable.get()
+        selected_ini["images"]["showcase"] = self.editor_showcase_variable.get()
+
+        selected_ini["links"]["steam workshop"] = self.editor_workshop_variable.get()
+        selected_ini["links"]["forums"] = self.editor_forums_variable.get()
+        selected_ini["links"]["trucky"] = self.editor_trucky_variable.get()
+        selected_ini["links"]["modland"] = self.editor_modland_variable.get()
+        selected_ini["links"]["sharemods"] = self.editor_sharemods_variable.get()
+        selected_ini["links"]["modsbase"] = self.editor_modsbase_variable.get()
+
+        # for line in self.editor_changelog_text.get()
+
+        with open("{}/{}.ini".format(self.game_short, self.variable_selected_mod.get()), "w") as configfile:
+            selected_ini.write(configfile)
+
+        winsound.MessageBeep() # audio confirmation
+        time.sleep(0.12)
+        winsound.MessageBeep()
+        time.sleep(0.12)
+        winsound.MessageBeep()
 
     def load_pack(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
