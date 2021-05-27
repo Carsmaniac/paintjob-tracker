@@ -51,8 +51,8 @@ class DescVars:
         if selected_ini["pack info"]["paintjobs"] != "":
             self.paintjobs = selected_ini["pack info"]["paintjobs"].split(";")
 
-        self.short_description = selected_ini["description"]["short description"]
-        self.more_info = selected_ini["description"]["more info"]
+        self.short_description = selected_ini["description"]["short description"].replace("\\n","\n") # configparser escapes \n, so we need to un-escape it
+        self.more_info = selected_ini["description"]["more info"].replace("\\n","\n")
 
         self.image_header = selected_ini["images"]["header"]
         self.image_showcase = selected_ini["images"]["showcase"]
@@ -94,6 +94,8 @@ class DescVars:
             self.other_pack_forums_link = ""
             self.other_pack_modland_link = ""
 
+        self.changelog = "\n".join(selected_ini["changelog"].keys())
+
 class Vehicle:
     def __init__(self, vehicle_directory, game_short, file_name):
         config = configparser.ConfigParser(allow_no_value = True)
@@ -130,10 +132,10 @@ class TrackerApp:
         self.container = ttk.Frame(master)
         self.container.pack(fill = "both")
 
-        self.variable_game = tk.StringVar(None, "Euro Truck Simulator 2")
+        self.variable_game = tk.StringVar(None, "American Truck Simulator")
         self.variable_game.trace("w", self.update_selectable_mods)
         self.variable_selected_mod = tk.StringVar(None, "")
-        # self.variable_directory = tk.StringVar(None, "D:/Documents/Trucksim/Uploading")
+        self.variable_selected_mod.trace("w", self.load_pack)
 
         self.panel_mod = ttk.LabelFrame(self.container, text = "Mod Selection")
         self.panel_mod.grid(row = 0, column = 0, sticky = "new", padx = 5, pady = (5, 0))
@@ -165,7 +167,7 @@ class TrackerApp:
         self.editor_more_info_text.grid(row = 4, rowspan = 2, column = 1, padx = 5, pady = (0, 5))
         self.editor_related_mods_label = ttk.Label(self.panel_editor, text = "Related mods")
         self.editor_related_mods_label.grid(row = 6, column = 0, padx = 5, sticky = "nw")
-        self.editor_related_mods_hint = ttk.Label(self.panel_editor, text = "Pack/Reason;P", foreground = "gray")
+        self.editor_related_mods_hint = ttk.Label(self.panel_editor, text = "Pack/Reason", foreground = "gray")
         self.editor_related_mods_hint.grid(row = 7, column = 0, padx = 5, sticky = "nw")
         self.editor_related_mods_text = tk.Text(self.panel_editor, height = 2.5, width = 35)
         self.editor_related_mods_text.grid(row = 6, rowspan = 2, column = 1, padx = 5, pady = (0, 5))
@@ -260,11 +262,33 @@ class TrackerApp:
 
     def save_pack(self, *args):
         print("save")
+        self.editor_changelog_text.get("1.0", "end")
         pass
 
     def load_pack(self, *args):
-        print("load")
-        pass
+        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
+        self.editor_paintjobs_text.delete("1.0", "end")
+        self.editor_paintjobs_text.insert("1.0", "\n".join(desc_vars.paintjobs))
+        self.editor_short_description_text.delete("1.0", "end")
+        self.editor_short_description_text.insert("1.0", desc_vars.short_description)
+        self.editor_more_info_text.delete("1.0", "end")
+        self.editor_more_info_text.insert("1.0", desc_vars.more_info)
+        related_mods = []
+        for rel in desc_vars.related_mods:
+            related_mods.append(rel[0] + "/" + rel[1])
+        self.editor_related_mods_text.delete("1.0", "end")
+        self.editor_related_mods_text.insert("1.0", "\n".join(related_mods))
+        self.editor_changelog_text.delete("1.0", "end")
+        self.editor_changelog_text.insert("1.0", desc_vars.changelog)
+        self.editor_bus_pack_variable.set(desc_vars.bus_pack)
+        self.editor_header_variable.set(desc_vars.image_header)
+        self.editor_showcase_variable.set(desc_vars.image_showcase)
+        self.editor_workshop_variable.set(desc_vars.workshop_link)
+        self.editor_forums_variable.set(desc_vars.forums_link)
+        self.editor_trucky_variable.set(desc_vars.trucky_link)
+        self.editor_modland_variable.set(desc_vars.modland_link)
+        self.editor_sharemods_variable.set(desc_vars.sharemods_link)
+        self.editor_modsbase_variable.set(desc_vars.modsbase_link)
 
     def change_directory(self, *args):
         new_directory = filedialog.askdirectory(title = "Package output", initialdir = self.variable_directory.get())
