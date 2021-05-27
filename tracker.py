@@ -12,6 +12,7 @@ IMAGE_TRAILERS_SUPPORTED = "web.site/trailers"
 IMAGE_BUSES_SUPPORTED = "web.site/buses"
 IMAGE_RELATED_MODS = "web.site/related"
 IMAGE_ENJOY = "web.site/enjoy"
+IMAGE_DOWNLOAD = "web.site/download"
 IMAGE_DOWNLOAD_SHAREMODS = "web.site/sharemods"
 IMAGE_DOWNLOAD_MODSBASE = "web.site/modsbase"
 IMAGE_DOWNLOAD_WORKSHOP = "web.site/workshop"
@@ -20,25 +21,36 @@ BUS_RESOURCES_FORUMs = "bus.stuff/forums"
 BUS_RESOURCES_WORKSHOP = "bus.stuff/workshop"
 BUS_RESOURCES_TRUCKY = "bus.stuff/trucky"
 
+# make a modland button, plain text but - remove colons from subheadings (bold them), switch sharemods link for modland link
+# change plain text to ets2.lt
+# also get schmitz s.ko reconstructed
+# and make that editing tab
+# and a button that just shows the changelog
+
 class DescVars:
     def __init__(self, game_short, mod_name):
         selected_ini = configparser.ConfigParser(allow_no_value = True)
+        selected_ini.optionxform = str
         selected_ini.read("{}/{}.ini".format(game_short, mod_name), encoding = "utf-8")
 
         self.mod_name = mod_name
 
         self.trucks = []
         for truck in selected_ini["pack info"]["trucks"].split(";"):
-            self.trucks.append(Vehicle(vehicle_directory, game_short, truck))
+            if truck != "":
+                self.trucks.append(Vehicle(vehicle_directory, game_short, truck))
         self.truck_mods = []
         for truck_mod in selected_ini["pack info"]["truck mods"].split(";"):
-            self.truck_mods.append(Vehicle(vehicle_directory, game_short, truck_mod))
+            if truck_mod != "":
+                self.truck_mods.append(Vehicle(vehicle_directory, game_short, truck_mod))
         self.trailers = []
         for trailer in selected_ini["pack info"]["trailers"].split(";"):
-            self.trailers.append(Vehicle(vehicle_directory, game_short, trailer))
+            if trailer != "":
+                self.trailers.append(Vehicle(vehicle_directory, game_short, trailer))
         self.trailer_mods = []
         for trailer_mod in selected_ini["pack info"]["trailer mods"].split(";"):
-            self.trailer_mods.append(Vehicle(vehicle_directory, game_short, trailer_mod))
+            if trailer_mod != "":
+                self.trailer_mods.append(Vehicle(vehicle_directory, game_short, trailer_mod))
         self.bus_pack = selected_ini["pack info"].getboolean("bus pack")
         self.paintjobs = []
         if selected_ini["pack info"]["paintjobs"] != "":
@@ -46,8 +58,9 @@ class DescVars:
 
         self.short_description = selected_ini["description"]["short description"]
         self.more_info = selected_ini["description"]["more info"]
-        self.header_image_link = selected_ini["description"]["header image link"]
-        self.forums_screenshot_image_link = selected_ini["description"]["forums screenshot image link"]
+
+        self.image_header = selected_ini["images"]["header"]
+        self.image_showcase = selected_ini["images"]["showcase"]
 
         self.related_mods = []
         if selected_ini["description"]["related mods"] != "":
@@ -62,10 +75,11 @@ class DescVars:
                 self.related_mods.append([related_name, related_reason, related_workshop_link, related_trucky_link, related_forums_link])
 
         self.workshop_link = selected_ini["links"]["steam workshop"]
+        self.forums_link = selected_ini["links"]["forums"]
         self.trucky_link = selected_ini["links"]["trucky"]
+        self.modland_link = selected_ini["links"]["modland"]
         self.sharemods_link = selected_ini["links"]["sharemods"]
         self.modsbase_link = selected_ini["links"]["modsbase"]
-        self.forums_link = selected_ini["links"]["forums"]
 
         self.other_game_dict = {"ats":["ets", "Euro Truck Simulator 2"], "ets":["ats", "American Truck Simulator"]}
         self.other_game_short = self.other_game_dict[game_short][0]
@@ -138,17 +152,6 @@ class TrackerApp:
         self.panel_mod.columnconfigure(0, weight = 1)
         self.panel_mod.columnconfigure(1, weight = 6)
 
-        # self.current_directory = ttk.Label(self.panel_package, textvariable = self.variable_directory)
-        # self.current_directory.grid(row = 0, column = 0, columnspan = 3, sticky = "new", padx = 5, pady = (5, 0))
-        # self.directory_changer = ttk.Button(self.panel_package, text = "Change directory", command = lambda : self.change_directory())
-        # self.directory_changer.grid(row = 1, column = 0, sticky = "we", padx = (5, 0))
-        # self.workshop_generator = ttk.Button(self.panel_package, text = "Generate Workshop package", command = lambda : self.generate_workshop())
-        # self.workshop_generator.grid(row = 1, column = 1, sticky = "we", padx = 5)
-        # self.standalone_generator = ttk.Button(self.panel_package, text = "Generate standalone package", command = lambda : self.generate_standalone())
-        # self.standalone_generator.grid(row = 1, column = 2, sticky = "we", padx = (0, 5), pady = 5)
-        # self.panel_package.columnconfigure(0, weight = 1)
-        # self.panel_package.columnconfigure(1, weight = 1)
-        # self.panel_package.columnconfigure(2, weight = 1)
 
         self.desc_mod_manager = ttk.Button(self.panel_description, text = "Mod manager", command = lambda : self.mod_manager_description())
         self.desc_mod_manager.grid(row = 0, column = 0, sticky = "news", padx = 5, pady = 5)
@@ -162,8 +165,6 @@ class TrackerApp:
         self.desc_trucky.grid(row = 4, column = 0, sticky = "news", padx = 5, pady = 5)
         self.desc_plain_text = ttk.Button(self.panel_description, text = "Plain text", command = lambda : self.plain_text_description())
         self.desc_plain_text.grid(row = 5, column = 0, sticky = "news", padx = 5, pady = (0, 5))
-        # self.description_copier = ttk.Button(self.panel_description, text = "Copy to clipboard", command = lambda : self.copy_description())
-        # self.description_copier.grid(row = 6, column = 0, sticky = "news", padx = 5, pady = 5)
         self.description_output = tk.Text(self.panel_description)
         self.description_output.grid(row = 0, rowspan = 6, column = 1, sticky = "news", padx = (0,5), pady = 5)
         self.panel_description.columnconfigure(0, weight = 1)
@@ -173,16 +174,21 @@ class TrackerApp:
         self.update_selectable_mods(self)
 
     def update_selectable_mods(self, *args):
-        if self.variable_game.get() == "Euro Truck Simulator 2":
-            mod_list = ["Very Long Company Name Inc Paintjob Pack", "ets2"]
-            self.mod_select.configure(values = mod_list)
-            self.variable_selected_mod.set(mod_list[0])
-            self.game_short = "ets"
-        else:
-            mod_list = ["Wowzer Paintjob Pack", "ats2"]
-            self.mod_select.configure(values = mod_list)
-            self.variable_selected_mod.set(mod_list[0])
-            self.game_short = "ats"
+        game_short_dict = {"Euro Truck Simulator 2":"ets", "American Truck Simulator":"ats"}
+        self.game_short = game_short_dict[self.variable_game.get()]
+        mod_list = []
+        for file_name in os.listdir(self.game_short):
+            mod_list.append(file_name[:-4])
+        self.mod_select.configure(values = mod_list)
+        self.variable_selected_mod.set(mod_list[0])
+
+    def sort_vehicles(self, *args):
+        print("sort")
+        pass
+
+    def save_pack(self, *args):
+        print("save")
+        pass
 
     def change_directory(self, *args):
         new_directory = filedialog.askdirectory(title = "Package output", initialdir = self.variable_directory.get())
@@ -192,7 +198,7 @@ class TrackerApp:
     def workshop_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
         desc = ""
-        desc += "[img]{}[/img]\n".format(desc_vars.header_image_link)
+        desc += "[img]{}[/img]\n".format(desc_vars.image_header)
         desc += desc_vars.short_description + "\n\n"
         if desc_vars.bus_pack:
             desc += "[b]This mod requires my [url={}]bus resource pack[/url] to work![/b]\n\n".format(BUS_RESOURCES_WORKSHOP)
@@ -243,9 +249,7 @@ class TrackerApp:
     def forums_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
         desc = ""
-        desc += "[color=#FFFFFF][size=200]{}[/size][/color]\n\n".format(desc_vars.mod_name)
-        desc += "[img]{}[/img]\n\n".format(desc_vars.forums_screenshot_image_link)
-        desc += "[img]{}[/img]\n".format(desc_vars.header_image_link)
+        desc += "[img]{}[/img]\n\n".format(desc_vars.image_showcase)
         desc += desc_vars.short_description + "\n\n"
         if desc_vars.bus_pack:
             desc += "[b]This mod requires my [url={}]bus resource pack[/url] to work![/b]\n\n".format(BUS_RESOURCES_FORUMs)
@@ -291,6 +295,7 @@ class TrackerApp:
             for rel in desc_vars.related_mods:
                 desc += "[*][url={}]{}[/url] - {}\n".format(rel[4], rel[0], rel[1])
             desc += "[/list]\n\n"
+        desc += "[img]{}[/img]\n".format(IMAGE_DOWNLOAD)
         desc += "[url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url]\n".format(desc_vars.sharemods_link, IMAGE_DOWNLOAD_SHAREMODS, desc_vars.modsbase_link, IMAGE_DOWNLOAD_MODSBASE, desc_vars.workshop_link, IMAGE_DOWNLOAD_WORKSHOP, desc_vars.trucky_link, IMAGE_DOWNLOAD_TRUCKY)
         desc += "[size=85]Please don't reupload my mods. Thanks :)[/size]"
         self.description_output.delete("1.0", "end")
@@ -300,7 +305,7 @@ class TrackerApp:
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
         desc = ""
         desc += "<div style=\"max-width: 650px\"> <!-- Cars was here ;) -->\n"
-        desc += "    <img src=\"{}\" style=\"padding-bottom: 5px\">\n".format(desc_vars.header_image_link)
+        desc += "    <img src=\"{}\" style=\"padding-bottom: 5px\">\n".format(desc_vars.image_header)
         desc += "    <p>{}</p>\n".format(desc_vars.short_description)
         if desc_vars.bus_pack:
             desc += "    <p style=\"font-weight: 700\">This mod requires my <a style=\"color: white; text-decoration: underline\" href=\"{}\">bus resource pack</a>to work!</p>\n".format(BUS_RESOURCES_TRUCKY)
@@ -391,7 +396,7 @@ class TrackerApp:
         if desc_vars.more_info != "":
             desc += desc_vars.more_info + "\n\n"
         if desc_vars.other_pack:
-            desc += "I've also made a pack for {}: {}".format(desc_vars.other_game, desc_vars.other_pack_forums_link)
+            desc += "I've also made a pack for {}: {}\n".format(desc_vars.other_game, desc_vars.other_pack_forums_link)
         desc += "Please don't reupload my mods to other sites. Thanks, and enjoy! :)"
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
