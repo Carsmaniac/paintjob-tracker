@@ -17,15 +17,10 @@ IMAGE_DOWNLOAD_SHAREMODS = "web.site/sharemods"
 IMAGE_DOWNLOAD_MODSBASE = "web.site/modsbase"
 IMAGE_DOWNLOAD_WORKSHOP = "web.site/workshop"
 IMAGE_DOWNLOAD_TRUCKY = "web.site/trucky"
-BUS_RESOURCES_FORUMs = "bus.stuff/forums"
+BUS_RESOURCES_FORUMS = "bus.stuff/forums"
 BUS_RESOURCES_WORKSHOP = "bus.stuff/workshop"
 BUS_RESOURCES_TRUCKY = "bus.stuff/trucky"
-
-# make a modland button, plain text but - remove colons from subheadings (bold them), switch sharemods link for modland link
-# change plain text to ets2.lt
-# also get schmitz s.ko reconstructed
-# and make that editing tab
-# and a button that just shows the changelog
+BUS_RESOURCES_MODLAND = "bus.stuff/modland"
 
 class DescVars:
     def __init__(self, game_short, mod_name):
@@ -91,11 +86,13 @@ class DescVars:
             self.other_pack_workshop_link = other_ini["links"]["steam workshop"]
             self.other_pack_trucky_link = other_ini["links"]["trucky"]
             self.other_pack_forums_link = other_ini["links"]["forums"]
+            self.other_pack_modland_link = other_ini["links"]["modland"]
         else:
             self.other_pack = False
             self.other_pack_workshop_link = ""
             self.other_pack_trucky_link = ""
             self.other_pack_forums_link = ""
+            self.other_pack_modland_link = ""
 
 class Vehicle:
     def __init__(self, vehicle_directory, game_short, file_name):
@@ -179,7 +176,7 @@ class TrackerApp:
         self.editor_bus_pack_variable = tk.BooleanVar(None, False)
         self.editor_bus_pack_checkbox = ttk.Checkbutton(self.panel_editor, text = "Bus pack", variable = self.editor_bus_pack_variable)
         self.editor_bus_pack_checkbox.grid(row = 0, column = 2, padx = 5, pady = 5, sticky = "w")
-        self.editor_sort_vehicles = ttk.Button(self.panel_editor, text = "Sort vehicles", width = 20, command = self.sort_vehicles)
+        self.editor_sort_vehicles = ttk.Button(self.panel_editor, text = "Sort vehicles", width = 20, command = lambda : self.sort_vehicles())
         self.editor_sort_vehicles.grid(row = 0, column = 3, padx = 5, pady = 5, sticky = "w")
         self.editor_header_label = ttk.Label(self.panel_editor, text = "Header image")
         self.editor_header_label.grid(row = 1, column = 2, padx = 5, sticky = "nw")
@@ -221,23 +218,27 @@ class TrackerApp:
         self.editor_modsbase_variable = tk.StringVar()
         self.editor_modsbase_text = ttk.Entry(self.panel_editor, textvariable = self.editor_modsbase_variable, width = 40)
         self.editor_modsbase_text.grid(row = 8, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
-        self.editor_save_pack = ttk.Button(self.panel_editor, text = "Save pack", width = 30, command = self.save_pack)
+        self.editor_save_pack = ttk.Button(self.panel_editor, text = "Save pack", width = 30, command = lambda : self.save_pack())
         self.editor_save_pack.grid(row = 9, column = 3, padx = 5, pady = (0, 5), sticky = "w")
 
         self.desc_mod_manager = ttk.Button(self.panel_description, text = "Mod manager", command = lambda : self.mod_manager_description())
         self.desc_mod_manager.grid(row = 0, column = 0, sticky = "news", padx = 5, pady = 5)
-        self.desc_short = ttk.Button(self.panel_description, text = "Short description", command = lambda : self.short_description())
-        self.desc_short.grid(row = 1, column = 0, sticky = "news", padx = 5)
         self.desc_workshop = ttk.Button(self.panel_description, text = "Steam Workshop", command = lambda : self.workshop_description())
-        self.desc_workshop.grid(row = 2, column = 0, sticky = "news", padx = 5, pady = 5)
+        self.desc_workshop.grid(row = 1, column = 0, sticky = "news", padx = 5, pady = (0, 5))
         self.desc_forums = ttk.Button(self.panel_description, text = "SCS Forums", command = lambda : self.forums_description())
-        self.desc_forums.grid(row = 3, column = 0, sticky = "news", padx = 5)
+        self.desc_forums.grid(row = 2, column = 0, sticky = "news", padx = 5, pady = (0, 5))
+        self.desc_short = ttk.Button(self.panel_description, text = "Short Forums", command = lambda : self.short_forums_description())
+        self.desc_short.grid(row = 3, column = 0, sticky = "news", padx = 5, pady = (0, 5))
         self.desc_trucky = ttk.Button(self.panel_description, text = "Trucky Mod Hub", command = lambda : self.trucky_description())
-        self.desc_trucky.grid(row = 4, column = 0, sticky = "news", padx = 5, pady = 5)
-        self.desc_plain_text = ttk.Button(self.panel_description, text = "Plain text", command = lambda : self.plain_text_description())
-        self.desc_plain_text.grid(row = 5, column = 0, sticky = "news", padx = 5, pady = (0, 5))
-        self.description_output = tk.Text(self.panel_description)
-        self.description_output.grid(row = 0, rowspan = 6, column = 1, sticky = "news", padx = (0,5), pady = 5)
+        self.desc_trucky.grid(row = 4, column = 0, sticky = "news", padx = 5, pady = (0, 5))
+        self.desc_short = ttk.Button(self.panel_description, text = "Short Trucky", command = lambda : self.short_trucky_description())
+        self.desc_short.grid(row = 5, column = 0, sticky = "news", padx = 5, pady = (0, 5))
+        self.desc_modland = ttk.Button(self.panel_description, text = "Modland", command = lambda : self.modland_description())
+        self.desc_modland.grid(row = 6, column = 0, sticky = "news", padx = 5, pady = (0, 5))
+        self.desc_ets2_lt = ttk.Button(self.panel_description, text = "ets2.lt", command = lambda : self.ets2_lt_description())
+        self.desc_ets2_lt.grid(row = 7, column = 0, sticky = "news", padx = 5, pady = (0, 5))
+        self.description_output = tk.Text(self.panel_description, height = 17.4)
+        self.description_output.grid(row = 0, rowspan = 8, column = 1, sticky = "news", padx = (0,5), pady = 5)
         self.panel_description.columnconfigure(0, weight = 1)
         self.panel_description.columnconfigure(1, weight = 4)
 
@@ -259,6 +260,10 @@ class TrackerApp:
 
     def save_pack(self, *args):
         print("save")
+        pass
+
+    def load_pack(self, *args):
+        print("load")
         pass
 
     def change_directory(self, *args):
@@ -323,7 +328,7 @@ class TrackerApp:
         desc += "[img]{}[/img]\n\n".format(desc_vars.image_showcase)
         desc += desc_vars.short_description + "\n\n"
         if desc_vars.bus_pack:
-            desc += "[b]This mod requires my [url={}]bus resource pack[/url] to work![/b]\n\n".format(BUS_RESOURCES_FORUMs)
+            desc += "[b]This mod requires my [url={}]bus resource pack[/url] to work![/b]\n\n".format(BUS_RESOURCES_FORUMS)
         if desc_vars.other_pack:
             desc += "{} pack available [url={}]here[/url].\n\n".format(desc_vars.other_game, desc_vars.other_pack_forums_link)
         if len(desc_vars.paintjobs) >= 1:
@@ -424,17 +429,61 @@ class TrackerApp:
                 desc += "        <li><a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a> - {}</li>\n".format(rel[3], rel[0], rel[1])
             desc += "    </ul>\n"
         desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Enjoy! :)</p>\n"
-        desc += "</div>" + desc_vars.forums_link # For copy-pasting into the forum URL field
+        desc += "</div>"
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
 
-    def plain_text_description(self, *args):
+    def modland_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
         desc = ""
         desc += desc_vars.short_description + "\n\n"
         if desc_vars.bus_pack:
             desc += ">> This mod requires my bus resource pack to work! <<\n"
-            desc += "Download it here: {}\n\n".format(BUS_RESOURCES_FORUMs)
+            desc += "Download it here: {}\n\n".format(BUS_RESOURCES_MODLAND)
+        if len(desc_vars.paintjobs) >= 1:
+            desc += "Paintjobs included\n"
+            for pj in desc_vars.paintjobs:
+                desc += "- {}\n".format(pj)
+            desc += "\n"
+        if desc_vars.bus_pack:
+            desc += "Buses supported\n"
+            for veh in desc_vars.truck_mods:
+                desc += "- {}'s {}\n".format(veh.mod_author, veh.name)
+            desc += "\n"
+        else:
+            if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
+                desc += "Trucks supported\n"
+                if len(desc_vars.trucks) >= 1:
+                    for veh in desc_vars.trucks:
+                        desc += "- {}\n".format(veh.name)
+                if len(desc_vars.truck_mods) >= 1:
+                    for veh in desc_vars.truck_mods:
+                        desc += "- {}'s {}\n".format(veh.mod_author, veh.name)
+                desc += "\n"
+            if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
+                desc += "Trailers supported\n"
+                if len(desc_vars.trailers) >= 1:
+                    for veh in desc_vars.trailers:
+                        desc += "- {}\n".format(veh.name)
+                if len(desc_vars.trailer_mods) >= 1:
+                    for veh in desc_vars.trailer_mods:
+                        desc += "- {}'s {}\n".format(veh.mod_author, veh.name)
+                desc += "\n"
+        if desc_vars.more_info != "":
+            desc += desc_vars.more_info + "\n\n"
+        if desc_vars.other_pack:
+            desc += "I've also made a pack for {}: {}\n".format(desc_vars.other_game, desc_vars.other_pack_modland_link)
+        desc += "Please don't reupload my mods to other sites. Thanks, and enjoy! :)"
+        self.description_output.delete("1.0", "end")
+        self.description_output.insert("1.0", desc)
+
+    def ets2_lt_description(self, *args):
+        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
+        desc = ""
+        desc += desc_vars.short_description + "\n\n"
+        if desc_vars.bus_pack:
+            desc += ">> This mod requires my bus resource pack to work! <<\n"
+            desc += "Download it here: {}\n\n".format(BUS_RESOURCES_FORUMS)
         if len(desc_vars.paintjobs) >= 1:
             desc += "Paintjobs included:\n"
             for pj in desc_vars.paintjobs:
@@ -472,7 +521,7 @@ class TrackerApp:
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
 
-    def short_description(self, *args):
+    def short_trucky_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
         desc = ""
         desc += "A pack of {} paintjobs supporting ".format(desc_vars.mod_name.replace(" Paintjob Pack", ""))
@@ -489,6 +538,26 @@ class TrackerApp:
                 desc += "{} trailers".format(total_trailers)
         if len(desc_vars.paintjobs) >= 1:
             desc += ", with {} different paintjobs".format(len(desc_vars.paintjobs))
+        self.description_output.delete("1.0", "end")
+        self.description_output.insert("1.0", desc)
+
+    def short_forums_description(self, *args):
+        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
+        desc = ""
+        desc += "[url={}][b][size=150]{}[/size][/b][/url] - ".format(desc_vars.forums_link[25:], desc_vars.mod_name)
+        if desc_vars.bus_pack:
+            desc += "{} buses".format(len(desc_vars.truck_mods))
+        else:
+            total_trucks = len(desc_vars.trucks) + len(desc_vars.truck_mods)
+            total_trailers = len(desc_vars.trailers) + len(desc_vars.trailer_mods)
+            if total_trucks >= 1 and total_trailers >= 1:
+                desc += "{} trucks, {} trailers".format(total_trucks, total_trailers)
+            elif total_trucks >= 1:
+                desc += "{} trucks".format(total_trucks)
+            elif total_trailers >= 1:
+                desc += "{} trailers".format(total_trailers)
+        if len(desc_vars.paintjobs) >= 1:
+            desc += ", {} different paintjobs".format(len(desc_vars.paintjobs))
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
 
