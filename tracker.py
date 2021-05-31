@@ -15,17 +15,21 @@ IMAGE_BUSES_SUPPORTED = "web.site/buses"
 IMAGE_RELATED_MODS = "web.site/related"
 IMAGE_ENJOY = "web.site/enjoy"
 IMAGE_DOWNLOAD = "web.site/download"
+
 IMAGE_DOWNLOAD_SHAREMODS = "web.site/sharemods"
 IMAGE_DOWNLOAD_MODSBASE = "web.site/modsbase"
 IMAGE_DOWNLOAD_WORKSHOP = "web.site/workshop"
 IMAGE_DOWNLOAD_TRUCKY = "web.site/trucky"
+
 BUS_RESOURCES_FORUMS = "bus.stuff/forums"
 BUS_RESOURCES_WORKSHOP = "bus.stuff/workshop"
 BUS_RESOURCES_TRUCKY = "bus.stuff/trucky"
 BUS_RESOURCES_MODLAND = "bus.stuff/modland"
 
+MOD_LINK_PAGE = "https://github.com/Carsmaniac/paintjob-packer/blob/master/library/mod%20links.md"
+
 class DescVars:
-    def __init__(self, game_short, mod_name):
+    def __init__(self, game_short, mod_name, link_formatting="none"):
         selected_ini = configparser.ConfigParser(allow_no_value = True)
         selected_ini.optionxform = str
         selected_ini.read("{}/{}.ini".format(game_short, mod_name), encoding = "utf-8")
@@ -54,7 +58,9 @@ class DescVars:
             self.paintjobs = selected_ini["pack info"]["paintjobs"].split(";")
 
         self.short_description = selected_ini["description"]["short description"].replace("\\n","\n") # configparser escapes \n, so we need to un-escape it
+        self.short_description = format_links(self, self.short_description, link_formatting) # converts markdown links to html or bbcode, or removes them
         self.more_info = selected_ini["description"]["more info"].replace("\\n","\n")
+        self.more_info = format_links(self, self.more_info, link_formatting)
         self.changelog = selected_ini["description"]["changelog"].replace("\\n","\n")
 
         self.image_header = selected_ini["images"]["header"]
@@ -336,8 +342,6 @@ class TrackerApp:
         selected_ini["links"]["sharemods"] = self.editor_sharemods_variable.get()
         selected_ini["links"]["modsbase"] = self.editor_modsbase_variable.get()
 
-        # for line in self.editor_changelog_text.get()
-
         with open("{}/{}.ini".format(self.game_short, self.variable_selected_mod.get()), "w") as configfile:
             selected_ini.write(configfile)
 
@@ -378,7 +382,7 @@ class TrackerApp:
             self.variable_directory.set(new_directory)
 
     def workshop_description(self, *args):
-        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
+        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "bbcode")
         desc = ""
         desc += "[img]{}[/img]\n".format(desc_vars.image_header)
         desc += desc_vars.short_description + "\n\n"
@@ -415,6 +419,10 @@ class TrackerApp:
                     for veh in desc_vars.trailer_mods:
                         desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
                 desc += "\n"
+        if self.game_short == "ets":
+            desc += "Let me know in the comments if you'd like to see any other vehicles supported, including any of [url={}#euro-truck-simulator-2]these mods![/url]\n\n".format(MOD_LINK_PAGE)
+        else:
+            desc += "Let me know in the comments if you'd like to see any other vehicles supported, including any of [url={}#american-truck-simulator]these mods![/url]\n\n".format(MOD_LINK_PAGE)
         if desc_vars.more_info != "":
             desc += desc_vars.more_info + "\n\n"
         if len(desc_vars.related_mods) >= 1:
@@ -429,7 +437,7 @@ class TrackerApp:
         self.description_output.insert("1.0", desc)
 
     def forums_description(self, *args):
-        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
+        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "bbcode")
         desc = ""
         desc += "[img]{}[/img]\n\n".format(desc_vars.image_showcase)
         desc += desc_vars.short_description + "\n\n"
@@ -484,7 +492,7 @@ class TrackerApp:
         self.description_output.insert("1.0", desc)
 
     def trucky_description(self, *args):
-        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
+        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "html")
         desc = ""
         desc += "<div style=\"max-width: 650px\"> <!-- Cars was here ;) -->\n"
         desc += "    <img src=\"{}\" style=\"padding-bottom: 5px\">\n".format(desc_vars.image_header)
@@ -540,7 +548,7 @@ class TrackerApp:
         self.description_output.insert("1.0", desc)
 
     def modland_description(self, *args):
-        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
+        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "txt")
         desc = ""
         desc += desc_vars.short_description + "\n\n"
         if desc_vars.bus_pack:
@@ -584,7 +592,7 @@ class TrackerApp:
         self.description_output.insert("1.0", desc)
 
     def ets2_lt_description(self, *args):
-        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
+        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "txt")
         desc = ""
         desc += desc_vars.short_description + "\n\n"
         if desc_vars.bus_pack:
@@ -668,7 +676,7 @@ class TrackerApp:
         self.description_output.insert("1.0", desc)
 
     def mod_manager_description(self, *args):
-        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
+        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "txt")
         desc = ""
         desc += desc_vars.short_description + "\n\n"
         if desc_vars.bus_pack:
@@ -710,8 +718,27 @@ class TrackerApp:
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
 
-    # def copy_description(self, *args):
-    #     pass
+def format_links(self, desc_text, format):
+    if format == "none":
+        return desc_text
+    else:
+        first_split = desc_text.split("[")
+        second_split = []
+        for string in first_split:
+            second_split += string.split(")")
+        output = []
+        for string in second_split:
+            if "](" in string:
+                link = string.split("](") # [text, url]
+                if format == "bbcode":
+                    output.append("[url={}]{}[/url]".format(link[1], link[0]))
+                elif format == "html":
+                    output.append("<a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a>".format(link[1], link[0]))
+                elif format == "txt":
+                    output.append(link[0])
+            else:
+                output.append(string)
+        return "".join(output)
 
 def main():
     root = tk.Tk()
