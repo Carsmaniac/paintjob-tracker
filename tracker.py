@@ -3,7 +3,6 @@ from tkinter import ttk
 from tkinter import filedialog
 import configparser
 import os
-import winsound
 import time
 
 VEHICLE_DIRECTORY = "D:/Documents/GitHub/paintjob-packer/library/vehicles"
@@ -372,9 +371,8 @@ class TrackerApp:
         with open("{}/{}.ini".format(self.game_short, self.variable_selected_mod.get()), "w") as configfile:
             selected_ini.write(configfile)
 
-        winsound.MessageBeep() # audio confirmation
-        time.sleep(0.12)
-        winsound.MessageBeep()
+        print("\a") # audio confirmation
+        print("\a")
 
     def save_pack(self, *args):
         selected_ini = configparser.ConfigParser(allow_no_value = True)
@@ -414,11 +412,8 @@ class TrackerApp:
         with open("{}/{}.ini".format(self.game_short, self.variable_selected_mod.get()), "w") as configfile:
             selected_ini.write(configfile)
 
-        winsound.MessageBeep() # audio confirmation
-        time.sleep(0.12)
-        winsound.MessageBeep()
-        time.sleep(0.12)
-        winsound.MessageBeep()
+        print("\a") # audio confirmation
+        print("\a")
 
     def load_pack(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
