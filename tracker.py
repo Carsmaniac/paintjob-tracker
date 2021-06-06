@@ -5,20 +5,15 @@ import configparser
 import os
 import time
 
-VEHICLE_DIRECTORY = "D:/Documents/GitHub/paintjob-packer/library/vehicles"
+VEHICLE_DIRECTORY = "C:/Users/Carsmaniac/Documents/GitHub/paintjob-packer/library/vehicles"
 
-IMAGE_PAINTJOBS_INCLUDED = "web.site/paintjobs"
-IMAGE_TRUCKS_SUPPORTED = "web.site/trucks"
-IMAGE_TRAILERS_SUPPORTED = "web.site/trailers"
-IMAGE_BUSES_SUPPORTED = "web.site/buses"
-IMAGE_RELATED_MODS = "web.site/related"
-IMAGE_ENJOY = "web.site/enjoy"
-IMAGE_DOWNLOAD = "web.site/download"
-
-IMAGE_DOWNLOAD_SHAREMODS = "web.site/sharemods"
-IMAGE_DOWNLOAD_MODSBASE = "web.site/modsbase"
-IMAGE_DOWNLOAD_WORKSHOP = "web.site/workshop"
-IMAGE_DOWNLOAD_TRUCKY = "web.site/trucky"
+IMAGE_PAINTJOBS_INCLUDED = "https://i.imgur.com/evSjSpv.png"
+IMAGE_TRUCKS_SUPPORTED = "https://i.imgur.com/EjcBoVh.png"
+IMAGE_TRAILERS_SUPPORTED = "https://i.imgur.com/MzOsazO.png"
+IMAGE_BUSES_SUPPORTED = "https://i.imgur.com/lbD4wqg.png"
+IMAGE_RELATED_MODS = "https://i.imgur.com/a7RJfN6.png"
+IMAGE_ENJOY = "https://i.imgur.com/Q1RxPRv.png"
+IMAGE_DOWNLOAD = "https://i.imgur.com/Bn5nY69.png"
 
 BUS_RESOURCES_FORUMS = "bus.stuff/forums"
 BUS_RESOURCES_WORKSHOP = "bus.stuff/workshop"
@@ -205,16 +200,16 @@ class TrackerApp:
         self.editor_workshop_variable = tk.StringVar()
         self.editor_workshop_text = ttk.Entry(self.panel_editor, textvariable = self.editor_workshop_variable, width = 40)
         self.editor_workshop_text.grid(row = 3, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
-        self.editor_forums_label = ttk.Label(self.panel_editor, text = "SCS Forums")
-        self.editor_forums_label.grid(row = 4, column = 2, padx = 5, sticky = "nw")
-        self.editor_forums_variable = tk.StringVar()
-        self.editor_forums_text = ttk.Entry(self.panel_editor, textvariable = self.editor_forums_variable, width = 40)
-        self.editor_forums_text.grid(row = 4, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
-        self.editor_trucky_label = ttk.Label(self.panel_editor, text = "Trucky Mod Hub")
-        self.editor_trucky_label.grid(row = 5, column = 2, padx = 5, sticky = "nw")
+        self.editor_trucky_label = ttk.Label(self.panel_editor, text = "TruckyMods")
+        self.editor_trucky_label.grid(row = 4, column = 2, padx = 5, sticky = "nw")
         self.editor_trucky_variable = tk.StringVar()
         self.editor_trucky_text = ttk.Entry(self.panel_editor, textvariable = self.editor_trucky_variable, width = 40)
-        self.editor_trucky_text.grid(row = 5, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
+        self.editor_trucky_text.grid(row = 4, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
+        self.editor_forums_label = ttk.Label(self.panel_editor, text = "SCS Forums")
+        self.editor_forums_label.grid(row = 5, column = 2, padx = 5, sticky = "nw")
+        self.editor_forums_variable = tk.StringVar()
+        self.editor_forums_text = ttk.Entry(self.panel_editor, textvariable = self.editor_forums_variable, width = 40)
+        self.editor_forums_text.grid(row = 5, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
         self.editor_modland_label = ttk.Label(self.panel_editor, text = "Modland")
         self.editor_modland_label.grid(row = 6, column = 2, padx = 5, sticky = "nw")
         self.editor_modland_variable = tk.StringVar()
@@ -225,7 +220,7 @@ class TrackerApp:
         self.editor_sharemods_variable = tk.StringVar()
         self.editor_sharemods_text = ttk.Entry(self.panel_editor, textvariable = self.editor_sharemods_variable, width = 40)
         self.editor_sharemods_text.grid(row = 7, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
-        self.editor_modsbase_label = ttk.Label(self.panel_editor, text = "ModsBase")
+        self.editor_modsbase_label = ttk.Label(self.panel_editor, text = "modsBase")
         self.editor_modsbase_label.grid(row = 8, column = 2, padx = 5, sticky = "nw")
         self.editor_modsbase_variable = tk.StringVar()
         self.editor_modsbase_text = ttk.Entry(self.panel_editor, textvariable = self.editor_modsbase_variable, width = 40)
@@ -241,7 +236,7 @@ class TrackerApp:
         self.desc_forums.grid(row = 2, column = 0, sticky = "news", padx = 5, pady = (0, 5))
         self.desc_short = ttk.Button(self.panel_description, text = "Short Forums", command = lambda : self.short_forums_description())
         self.desc_short.grid(row = 3, column = 0, sticky = "news", padx = 5, pady = (0, 5))
-        self.desc_trucky = ttk.Button(self.panel_description, text = "Trucky Mod Hub", command = lambda : self.trucky_description())
+        self.desc_trucky = ttk.Button(self.panel_description, text = "TruckyMods", command = lambda : self.trucky_description())
         self.desc_trucky.grid(row = 4, column = 0, sticky = "news", padx = 5, pady = (0, 5))
         self.desc_short = ttk.Button(self.panel_description, text = "Short Trucky", command = lambda : self.short_trucky_description())
         self.desc_short.grid(row = 5, column = 0, sticky = "news", padx = 5, pady = (0, 5))
@@ -287,13 +282,10 @@ class TrackerApp:
         self.checklist_workshop_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload to Steam Workshop, add link", variable = self.checklist_workshop_variable)
         self.checklist_workshop_checkbox.grid(row = 9, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
         self.checklist_trucky_variable = tk.BooleanVar(None, False)
-        self.checklist_trucky_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload to Trucky, add link", variable = self.checklist_trucky_variable)
+        self.checklist_trucky_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload to TruckyMods, add link", variable = self.checklist_trucky_variable)
         self.checklist_trucky_checkbox.grid(row = 10, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
-        self.checklist_rename_variable = tk.BooleanVar(None, False)
-        self.checklist_rename_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Rename zip to pack name and version", variable = self.checklist_rename_variable)
-        self.checklist_rename_checkbox.grid(row = 11, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
         self.checklist_sharemods_variable = tk.BooleanVar(None, False)
-        self.checklist_sharemods_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload to ShareMods and ModsBase, add links", variable = self.checklist_sharemods_variable)
+        self.checklist_sharemods_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload to ShareMods and modsBase, add links", variable = self.checklist_sharemods_variable)
         self.checklist_sharemods_checkbox.grid(row = 12, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
         self.checklist_forums_variable = tk.BooleanVar(None, False)
         self.checklist_forums_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload to SCS Forums, add link", variable = self.checklist_forums_variable)
@@ -385,7 +377,7 @@ class TrackerApp:
         checklist_variables = [self.checklist_packer_variable, self.checklist_paintjob_variable, self.checklist_icon_variable,
                                self.checklist_screenshots_variable, self.checklist_first_images_variable, self.checklist_second_images_variable,
                                self.checklist_upload_images_variable, self.checklist_mod_manager_variable, self.checklist_universal_variable,
-                               self.checklist_workshop_variable, self.checklist_trucky_variable, self.checklist_rename_variable,
+                               self.checklist_workshop_variable, self.checklist_trucky_variable,
                                self.checklist_sharemods_variable, self.checklist_forums_variable, self.checklist_trucky_forums_link_variable,
                                self.checklist_modland_variable, self.checklist_ets2_lt_variable]
         checklist_stage = 0
@@ -442,7 +434,7 @@ class TrackerApp:
         checklist_variables = [self.checklist_packer_variable, self.checklist_paintjob_variable, self.checklist_icon_variable,
                                self.checklist_screenshots_variable, self.checklist_first_images_variable, self.checklist_second_images_variable,
                                self.checklist_upload_images_variable, self.checklist_mod_manager_variable, self.checklist_universal_variable,
-                               self.checklist_workshop_variable, self.checklist_trucky_variable, self.checklist_rename_variable,
+                               self.checklist_workshop_variable, self.checklist_trucky_variable,
                                self.checklist_sharemods_variable, self.checklist_forums_variable, self.checklist_trucky_forums_link_variable,
                                self.checklist_modland_variable, self.checklist_ets2_lt_variable]
         for i in range(len(checklist_variables)):
@@ -522,9 +514,10 @@ class TrackerApp:
             desc += "{} pack available [url={}]here[/url].\n\n".format(desc_vars.other_game, desc_vars.other_pack_forums_link)
         if len(desc_vars.paintjobs) >= 1:
             desc += "[img]{}[/img]\n".format(IMAGE_PAINTJOBS_INCLUDED)
+            desc += "[list]\n"
             for pj in desc_vars.paintjobs:
-                desc += pj + "\n"
-            desc += "\n"
+                desc += "[*]{}\n".format(pj)
+            desc += "[/list]\n\n"
         if desc_vars.bus_pack:
             desc += "[img]{}[/img]\n".format(IMAGE_BUSES_SUPPORTED)
             desc += "[list]\n"
@@ -561,7 +554,12 @@ class TrackerApp:
                 desc += "[*][url={}]{}[/url] - {}\n".format(rel[4], rel[0], rel[1])
             desc += "[/list]\n\n"
         desc += "[img]{}[/img]\n".format(IMAGE_DOWNLOAD)
-        desc += "[url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url] [url={}][img]{}[/img][/url]\n".format(desc_vars.sharemods_link, IMAGE_DOWNLOAD_SHAREMODS, desc_vars.modsbase_link, IMAGE_DOWNLOAD_MODSBASE, desc_vars.workshop_link, IMAGE_DOWNLOAD_WORKSHOP, desc_vars.trucky_link, IMAGE_DOWNLOAD_TRUCKY)
+        desc += "[list]\n"
+        desc += "[*][url={}][size=150][b][color=#e7e7e7]Share[/color][color=#32d98c]Mods[/color][/b][/size] (direct download)[/url]\n".format(desc_vars.sharemods_link)
+        desc += "[*][url={}][size=150][b][color=#200a5d]mods[/color][color=#eb5d0f]Base[/color][/b][/size] (mirror download)[/url]\n".format(desc_vars.modsbase_link)
+        desc += "[*][url={}][size=150][b][color=#c81f55]TruckyMods[/color][/b][/size] (auto-updates and older versions)[/url]\n".format(desc_vars.trucky_link)
+        desc += "[*][url={}][size=150][b][color=#7d9ac4]Steam Workshop[/color][/b][/size] (instant install and auto-updates)[/url]\n".format(desc_vars.workshop_link)
+        desc += "[/list]\n"
         desc += "[size=85]Please don't reupload my mods. Thanks :)[/size]"
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
@@ -569,8 +567,7 @@ class TrackerApp:
     def trucky_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "html")
         desc = ""
-        desc += "<div style=\"max-width: 650px\"> <!-- Cars was here ;) -->\n"
-        desc += "    <img src=\"{}\" style=\"padding-bottom: 5px\">\n".format(desc_vars.image_header)
+        desc += "<div> <!-- Cars was here ;) -->\n"
         desc += "    <p>{}</p>\n".format(desc_vars.short_description)
         if desc_vars.bus_pack:
             desc += "    <p style=\"font-weight: 700\">This mod requires my <a style=\"color: white; text-decoration: underline\" href=\"{}\">bus resource pack</a>to work!</p>\n".format(BUS_RESOURCES_TRUCKY)
@@ -580,35 +577,39 @@ class TrackerApp:
             desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Paintjobs included</p>\n"
             desc += "    <ul style=\"list-style: none; padding-left: 15px\">\n"
             for pj in desc_vars.paintjobs:
-                desc += "        <li>{}</li>\n".format(pj)
+                desc += "        <li>- {}</li>\n".format(pj)
             desc += "    </ul>\n"
         if desc_vars.bus_pack:
             desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Buses supported</p>\n"
-            desc += "    <ul>\n"
+            desc += "    <ul style=\"list-style: none; padding-left: 15px\">\n"
             for veh in desc_vars.truck_mods:
-                desc += "        <li>{}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link("tfaw"), veh.name)
+                desc += "        <li>- {}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link("tfaw"), veh.name)
             desc += "    </ul>\n"
         else:
             if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
                 desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Trucks supported</p>\n"
-                desc += "    <ul>\n"
+                desc += "    <ul style=\"list-style: none; padding-left: 15px\">\n"
                 if len(desc_vars.trucks) >= 1:
                     for veh in desc_vars.trucks:
-                        desc += "        <li>{}</li>\n".format(veh.name)
+                        desc += "        <li>- {}</li>\n".format(veh.name)
                 if len(desc_vars.truck_mods) >= 1:
                     for veh in desc_vars.truck_mods:
-                        desc += "        <li>{}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link("tfaw"), veh.name)
+                        desc += "        <li>- {}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link("tfaw"), veh.name)
                 desc += "    </ul>\n"
             if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
                 desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Trailers supported</p>\n"
-                desc += "    <ul>\n"
+                desc += "    <ul style=\"list-style: none; padding-left: 15px\">\n"
                 if len(desc_vars.trailers) >= 1:
                     for veh in desc_vars.trailers:
-                        desc += "        <li>{}</li>\n".format(veh.name)
+                        desc += "        <li>- {}</li>\n".format(veh.name)
                 if len(desc_vars.trailer_mods) >= 1:
                     for veh in desc_vars.trailer_mods:
-                        desc += "        <li>{}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link("tfaw"), veh.name)
+                        desc += "        <li>- {}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link("tfaw"), veh.name)
                 desc += "    </ul>\n"
+        if self.game_short == "ets":
+            desc += "    <p>Let me know in the comments if you'd like to see any other vehicles supported, including any of <a style=\"color: white; text-decoration: underline\" href=\"{}#euro-truck-simulator-2\">these mods!</a></p>\n".format(MOD_LINK_PAGE)
+        else:
+            desc += "    <p>Let me know in the comments if you'd like to see any other vehicles supported, including any of <a style=\"color: white; text-decoration: underline\" href=\"{}#american-truck-simulator\">these mods!</a></p>\n".format(MOD_LINK_PAGE)
         if desc_vars.more_info != "":
             desc += "    <p>{}</p>".format(desc_vars.more_info)
         if len(desc_vars.related_mods) >= 1:
