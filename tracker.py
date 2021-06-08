@@ -401,7 +401,7 @@ class TrackerApp:
         selected_ini["links"]["sharemods"] = self.editor_sharemods_variable.get()
         selected_ini["links"]["modsbase"] = self.editor_modsbase_variable.get()
 
-        with open("{}/{}.ini".format(self.game_short, self.variable_selected_mod.get()), "w") as configfile:
+        with open("{}/{}.ini".format(self.game_short, self.variable_selected_mod.get()), "w", encoding="utf-8") as configfile:
             selected_ini.write(configfile)
 
         print("\a") # audio confirmation
@@ -631,18 +631,18 @@ class TrackerApp:
             desc += ">> This mod requires my bus resource pack to work! <<\n"
             desc += "Download it here: {}\n\n".format(BUS_RESOURCES_MODLAND)
         if len(desc_vars.paintjobs) >= 1:
-            desc += "Paintjobs included\n"
+            desc += "Paintjobs included:\n"
             for pj in desc_vars.paintjobs:
                 desc += "- {}\n".format(pj)
             desc += "\n"
         if desc_vars.bus_pack:
-            desc += "Buses supported\n"
+            desc += "Buses supported:\n"
             for veh in desc_vars.truck_mods:
                 desc += "- {}'s {}\n".format(veh.mod_author, veh.name)
             desc += "\n"
         else:
             if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
-                desc += "Trucks supported\n"
+                desc += "Trucks supported:\n"
                 if len(desc_vars.trucks) >= 1:
                     for veh in desc_vars.trucks:
                         desc += "- {}\n".format(veh.name)
@@ -651,7 +651,7 @@ class TrackerApp:
                         desc += "- {}'s {}\n".format(veh.mod_author, veh.name)
                 desc += "\n"
             if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
-                desc += "Trailers supported\n"
+                desc += "Trailers supported:\n"
                 if len(desc_vars.trailers) >= 1:
                     for veh in desc_vars.trailers:
                         desc += "- {}\n".format(veh.name)
@@ -798,23 +798,27 @@ def format_links(self, desc_text, format):
     if format == "none":
         return desc_text
     else:
-        first_split = desc_text.split("[")
-        second_split = []
-        for string in first_split:
-            second_split += string.split(")")
-        output = []
-        for string in second_split:
-            if "](" in string:
-                link = string.split("](") # [text, url]
-                if format == "bbcode":
-                    output.append("[url={}]{}[/url]".format(link[1], link[0]))
-                elif format == "html":
-                    output.append("<a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a>".format(link[1], link[0]))
-                elif format == "txt":
-                    output.append(link[0])
-            else:
-                output.append(string)
-        return "".join(output)
+        if "](" in desc_text:
+            link_index = desc_text.index("](") # assuming there is only ever one link in a description
+            link_start = []
+            for i in range(link_index):
+                if desc_text[link_index - i] == "[":
+                    link_start.append(link_index - i) # only the first value is used, so only the bracket that actually marks the link is counted
+            link_end = []
+            for i in range(len(desc_text) - link_index):
+                if desc_text[link_index + i] == ")":
+                    link_end.append(link_index + i + 1)
+            md_link = desc_text[link_start[0]:link_end[0]] # link in markdown (md) format
+            link = md_link[1:-1].split("](")
+            if format == "bbcode":
+                output_link = "[url={}]{}[/url]".format(link[1], link[0])
+            elif format == "html":
+                output_link = "<a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a>".format(link[1], link[0])
+            elif format == "txt":
+                output_link = link[0]
+            return desc_text[:link_start[0]] + output_link + desc_text[link_end[0]:]
+        else:
+            return desc_text
 
 def main():
     root = tk.Tk()
