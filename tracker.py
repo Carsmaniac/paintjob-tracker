@@ -568,7 +568,7 @@ class TrackerApp:
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "html")
         desc = ""
         desc += "<div> <!-- Cars was here ;) -->\n"
-        desc += "    <p>{}</p>\n".format(desc_vars.short_description)
+        desc += "    <p>{}</p>\n".format(desc_vars.short_description.replace("\n\n", "</p>\n    <p>"))
         if desc_vars.bus_pack:
             desc += "    <p style=\"font-weight: 700\">This mod requires my <a style=\"color: white; text-decoration: underline\" href=\"{}\">bus resource pack</a>to work!</p>\n".format(BUS_RESOURCES_TRUCKY)
         if desc_vars.other_pack:
@@ -611,7 +611,7 @@ class TrackerApp:
         else:
             desc += "    <p>Let me know in the comments if you'd like to see any other vehicles supported, including any of <a style=\"color: white; text-decoration: underline\" href=\"{}#american-truck-simulator\">these mods!</a></p>\n".format(MOD_LINK_PAGE)
         if desc_vars.more_info != "":
-            desc += "    <p>{}</p>".format(desc_vars.more_info)
+            desc += "    <p>{}</p>".format(desc_vars.more_info.replace("\n\n", "</p>\n    <p>"))
         if len(desc_vars.related_mods) >= 1:
             desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Related mods</p>\n"
             desc += "    <ul>\n"
