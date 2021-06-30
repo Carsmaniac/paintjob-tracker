@@ -306,9 +306,18 @@ class TrackerApp:
     def update_selectable_mods(self, *args):
         game_short_dict = {"Euro Truck Simulator 2":"ets", "American Truck Simulator":"ats"}
         self.game_short = game_short_dict[self.variable_game.get()]
-        mod_list = []
+        mod_list_incomplete = []
+        mod_list_complete = []
         for file_name in os.listdir(self.game_short):
-            mod_list.append(file_name[:-4])
+            each_mod = configparser.ConfigParser(allow_no_value = True)
+            each_mod.optionxform = str
+            each_mod.read("{}/{}".format(self.game_short, file_name), encoding = "utf-8")
+            each_mod_stage = int(each_mod["pack info"]["checklist stage"])
+            if each_mod_stage < 15:
+                mod_list_incomplete.append(file_name[:-4])
+            else:
+                mod_list_complete.append(file_name[:-4])
+        mod_list = mod_list_incomplete + mod_list_complete
         self.mod_select.configure(values = mod_list)
         self.variable_selected_mod.set(mod_list[0])
 
