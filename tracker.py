@@ -110,8 +110,7 @@ class Vehicle:
         self.mod_link_workshop = config["vehicle info"]["mod link workshop"]
         self.mod_link_forums = config["vehicle info"]["mod link forums"]
         self.mod_link_author_site = config["vehicle info"]["mod link author site"]
-        # self.mod_link_trucky = config["vehicle info"]["mod link trucky"]
-        self.mod_link_trucky = ""
+        self.mod_link_trucky = config["vehicle info"]["mod link trucky"]
 
     def mod_link(self, _priority):
         priority = list(_priority)
@@ -469,31 +468,31 @@ class TrackerApp:
         if len(desc_vars.paintjobs) >= 1:
             desc += "[img]{}[/img]\n".format(IMAGE_PAINTJOBS_INCLUDED)
             for pj in desc_vars.paintjobs:
-                desc += pj + "\n"
+                desc += "- " + pj + "\n"
             desc += "\n"
         if desc_vars.bus_pack:
             desc += "[img]{}[/img]\n".format(IMAGE_BUSES_SUPPORTED)
             for veh in desc_vars.truck_mods:
-                desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
+                desc += "- {}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
             desc += "\n"
         else:
             if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
                 desc += "[img]{}[/img]\n".format(IMAGE_TRUCKS_SUPPORTED)
                 if len(desc_vars.trucks) >= 1:
                     for veh in desc_vars.trucks:
-                        desc += veh.name + "\n"
+                        desc += "- " + veh.name + "\n"
                 if len(desc_vars.truck_mods) >= 1:
                     for veh in desc_vars.truck_mods:
-                        desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
+                        desc += "- {}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
                 desc += "\n"
             if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
                 desc += "[img]{}[/img]\n".format(IMAGE_TRAILERS_SUPPORTED)
                 if len(desc_vars.trailers) >= 1:
                     for veh in desc_vars.trailers:
-                        desc += veh.name + "\n"
+                        desc += "- " + veh.name + "\n"
                 if len(desc_vars.trailer_mods) >= 1:
                     for veh in desc_vars.trailer_mods:
-                        desc += "{}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
+                        desc += "- {}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
                 desc += "\n"
         if self.game_short == "ets":
             desc += "Let me know in the comments if you'd like to see any other vehicles supported, including any of [url={}#euro-truck-simulator-2]these mods![/url]\n\n".format(MOD_LINK_PAGE)
@@ -566,7 +565,7 @@ class TrackerApp:
         desc += "[list]\n"
         desc += "[*][url={}][size=150][b][color=#e7e7e7]Share[/color][color=#32d98c]Mods[/color][/b][/size] (direct download)[/url]\n".format(desc_vars.sharemods_link)
         desc += "[*][url={}][size=150][b][color=#200a5d]mods[/color][color=#eb5d0f]Base[/color][/b][/size] (mirror download)[/url]\n".format(desc_vars.modsbase_link)
-        desc += "[*][url={}][size=150][b][color=#c81f55]TruckyMods[/color][/b][/size] (auto-updates and older versions)[/url]\n".format(desc_vars.trucky_link)
+        desc += "[*][url={}][size=150][b][color=#c81f55]TruckyMods[/color][/b][/size] (instant install and older versions)[/url]\n".format(desc_vars.trucky_link)
         desc += "[*][url={}][size=150][b][color=#7d9ac4]Steam Workshop[/color][/b][/size] (instant install and auto-updates)[/url]\n".format(desc_vars.workshop_link)
         desc += "[/list]\n"
         desc += "[size=85]Please don't reupload my mods. Thanks :)[/size]"
