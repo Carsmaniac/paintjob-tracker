@@ -263,42 +263,42 @@ class TrackerApp:
         self.checklist_screenshots_variable = tk.BooleanVar(None, False)
         self.checklist_screenshots_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Take screenshots x5", variable = self.checklist_screenshots_variable)
         self.checklist_screenshots_checkbox.grid(row = 3, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
-        self.checklist_first_images_variable = tk.BooleanVar(None, False)
-        self.checklist_first_images_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Make Workshop image, mod manager, header", variable = self.checklist_first_images_variable)
-        self.checklist_first_images_checkbox.grid(row = 4, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
-        self.checklist_second_images_variable = tk.BooleanVar(None, False)
-        self.checklist_second_images_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Crop screenshots, make showcase", variable = self.checklist_second_images_variable)
-        self.checklist_second_images_checkbox.grid(row = 5, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
+        self.checklist_templated_images_variable = tk.BooleanVar(None, False)
+        self.checklist_templated_images_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Make templated images and crop screenshots", variable = self.checklist_templated_images_variable)
+        self.checklist_templated_images_checkbox.grid(row = 4, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
         self.checklist_upload_images_variable = tk.BooleanVar(None, False)
         self.checklist_upload_images_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload header and showcase, add links", variable = self.checklist_upload_images_variable)
-        self.checklist_upload_images_checkbox.grid(row = 6, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
+        self.checklist_upload_images_checkbox.grid(row = 5, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
         self.checklist_mod_manager_variable = tk.BooleanVar(None, False)
         self.checklist_mod_manager_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Generate mod manager description", variable = self.checklist_mod_manager_variable)
-        self.checklist_mod_manager_checkbox.grid(row = 7, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
-        self.checklist_universal_variable = tk.BooleanVar(None, False)
-        self.checklist_universal_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Package into universal.zip", variable = self.checklist_universal_variable)
-        self.checklist_universal_checkbox.grid(row = 8, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
+        self.checklist_mod_manager_checkbox.grid(row = 6, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
         self.checklist_workshop_variable = tk.BooleanVar(None, False)
-        self.checklist_workshop_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload to Steam Workshop, add link", variable = self.checklist_workshop_variable)
-        self.checklist_workshop_checkbox.grid(row = 9, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
+        self.checklist_workshop_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Package, upload to Steam Workshop, add link", variable = self.checklist_workshop_variable)
+        self.checklist_workshop_checkbox.grid(row = 7, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
         self.checklist_trucky_variable = tk.BooleanVar(None, False)
-        self.checklist_trucky_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload to TruckyMods, add link", variable = self.checklist_trucky_variable)
-        self.checklist_trucky_checkbox.grid(row = 10, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
+        self.checklist_trucky_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Re-package, upload to Trucky Mod Hub, add link", variable = self.checklist_trucky_variable)
+        self.checklist_trucky_checkbox.grid(row = 8, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
         self.checklist_sharemods_variable = tk.BooleanVar(None, False)
         self.checklist_sharemods_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload to ShareMods and modsBase, add links", variable = self.checklist_sharemods_variable)
-        self.checklist_sharemods_checkbox.grid(row = 12, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
+        self.checklist_sharemods_checkbox.grid(row = 9, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
         self.checklist_forums_variable = tk.BooleanVar(None, False)
         self.checklist_forums_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload to SCS Forums, add link", variable = self.checklist_forums_variable)
-        self.checklist_forums_checkbox.grid(row = 13, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
-        self.checklist_trucky_forums_link_variable = tk.BooleanVar(None, False)
-        self.checklist_trucky_forums_link_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Add forums link to Trucky page", variable = self.checklist_trucky_forums_link_variable)
-        self.checklist_trucky_forums_link_checkbox.grid(row = 14, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
+        self.checklist_forums_checkbox.grid(row = 10, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
+        self.checklist_forums_link_variable = tk.BooleanVar(None, False)
+        self.checklist_forums_link_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Add forums link to main post", variable = self.checklist_forums_link_variable)
+        self.checklist_forums_link_checkbox.grid(row = 12, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
+        self.checklist_forums_trucky_variable = tk.BooleanVar(None, False)
+        self.checklist_forums_trucky_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Add forums link to Trucky page", variable = self.checklist_forums_trucky_variable)
+        self.checklist_forums_trucky_checkbox.grid(row = 13, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
         self.checklist_modland_variable = tk.BooleanVar(None, False)
-        self.checklist_modland_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload to Modland, add link", variable = self.checklist_modland_variable)
-        self.checklist_modland_checkbox.grid(row = 15, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
+        self.checklist_modland_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload to Modland", variable = self.checklist_modland_variable)
+        self.checklist_modland_checkbox.grid(row = 14, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
         self.checklist_ets2_lt_variable = tk.BooleanVar(None, False)
         self.checklist_ets2_lt_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload to ets2.lt/atsmods.lt", variable = self.checklist_ets2_lt_variable)
-        self.checklist_ets2_lt_checkbox.grid(row = 16, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
+        self.checklist_ets2_lt_checkbox.grid(row = 15, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
+        self.checklist_modland_link_variable = tk.BooleanVar(None, False)
+        self.checklist_modland_link_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Add Modland link", variable = self.checklist_modland_link_variable)
+        self.checklist_modland_link_checkbox.grid(row = 16, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
 
         self.game_short = ""
         self.update_selectable_mods(self)
@@ -384,11 +384,11 @@ class TrackerApp:
         selected_ini["pack info"]["paintjobs"] = self.editor_paintjobs_text.get("1.0", "end").rstrip().replace("\n", ";")
 
         checklist_variables = [self.checklist_packer_variable, self.checklist_paintjob_variable, self.checklist_icon_variable,
-                               self.checklist_screenshots_variable, self.checklist_first_images_variable, self.checklist_second_images_variable,
-                               self.checklist_upload_images_variable, self.checklist_mod_manager_variable, self.checklist_universal_variable,
-                               self.checklist_workshop_variable, self.checklist_trucky_variable,
-                               self.checklist_sharemods_variable, self.checklist_forums_variable, self.checklist_trucky_forums_link_variable,
-                               self.checklist_modland_variable, self.checklist_ets2_lt_variable]
+                               self.checklist_screenshots_variable, self.checklist_templated_images_variable, self.checklist_upload_images_variable,
+                               self.checklist_mod_manager_variable, self.checklist_workshop_variable, self.checklist_trucky_variable,
+                               self.checklist_sharemods_variable, self.checklist_forums_variable, self.checklist_forums_link_variable,
+                               self.checklist_forums_trucky_variable, self.checklist_modland_variable, self.checklist_ets2_lt_variable,
+                               self.checklist_modland_link_variable]
         checklist_stage = 0
         for i in range(len(checklist_variables)):
             if checklist_variables[i].get() and i > checklist_stage:
@@ -441,11 +441,11 @@ class TrackerApp:
         self.editor_sharemods_variable.set(desc_vars.sharemods_link)
         self.editor_modsbase_variable.set(desc_vars.modsbase_link)
         checklist_variables = [self.checklist_packer_variable, self.checklist_paintjob_variable, self.checklist_icon_variable,
-                               self.checklist_screenshots_variable, self.checklist_first_images_variable, self.checklist_second_images_variable,
-                               self.checklist_upload_images_variable, self.checklist_mod_manager_variable, self.checklist_universal_variable,
-                               self.checklist_workshop_variable, self.checklist_trucky_variable,
-                               self.checklist_sharemods_variable, self.checklist_forums_variable, self.checklist_trucky_forums_link_variable,
-                               self.checklist_modland_variable, self.checklist_ets2_lt_variable]
+                               self.checklist_screenshots_variable, self.checklist_templated_images_variable, self.checklist_upload_images_variable,
+                               self.checklist_mod_manager_variable, self.checklist_workshop_variable, self.checklist_trucky_variable,
+                               self.checklist_sharemods_variable, self.checklist_forums_variable, self.checklist_forums_link_variable,
+                               self.checklist_forums_trucky_variable, self.checklist_modland_variable, self.checklist_ets2_lt_variable,
+                               self.checklist_modland_link_variable]
         for i in range(len(checklist_variables)):
             if i <= desc_vars.checklist_stage:
                 checklist_variables[i].set(True)
