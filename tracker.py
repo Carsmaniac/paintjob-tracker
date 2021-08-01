@@ -21,6 +21,7 @@ BUS_RESOURCES_TRUCKY = "bus.stuff/trucky"
 BUS_RESOURCES_MODLAND = "bus.stuff/modland"
 
 MOD_LINK_PAGE = "https://github.com/Carsmaniac/paintjob-packer/blob/master/library/mod%20links.md"
+BUY_ME_A_COFFEE = "https://www.buymeacoffee.com/carsmaniac"
 
 class DescVars:
     def __init__(self, game_short, mod_name, link_formatting="none"):
@@ -507,6 +508,7 @@ class TrackerApp:
             desc += "\n"
         desc += "[img]{}[/img]\n".format(IMAGE_ENJOY)
         desc += "Please don't reupload my mods to other sites. They're already available elsewhere, if you'd like to download them directly. Thanks :)\n\n"
+        desc += "Everything I make is (and always will be) free, but if you'd like to support the creation of my mods you can [url={}]buy me a coffee.[/url]\nSupport isn't expected, but it is appreciated!\n\n".format(BUY_ME_A_COFFEE)
         desc += "You can [url=https://steamcommunity.com/id/carsmaniac/myworkshopfiles/]follow me on the Workshop[/url] to see more!"
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
@@ -627,6 +629,7 @@ class TrackerApp:
                 desc += "        <li><a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a> - {}</li>\n".format(rel[3], rel[0], rel[1])
             desc += "    </ul>\n"
         desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Enjoy! :)</p>\n"
+        desc += "    <p>Everything I make is (and always will be) free, but if you'd like to support the creation of my mods you can <a style=\"color: white; text-decoration: underline\" href=\"{}\">buy me a coffee</a>. Support isn't expected, but it is appreciated!\n".format(BUY_ME_A_COFFEE)
         desc += "</div>"
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
@@ -670,7 +673,7 @@ class TrackerApp:
         if desc_vars.more_info != "":
             desc += desc_vars.more_info + "\n\n"
         if desc_vars.other_pack:
-            desc += "I've also made a pack for {}: {}\n".format(desc_vars.other_game, desc_vars.other_pack_modland_link)
+            desc += "I've also made a pack for {}:\n{}\n\n".format(desc_vars.other_game, desc_vars.other_pack_modland_link)
         desc += "Please don't reupload my mods to other sites. Thanks, and enjoy! :)"
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
@@ -713,8 +716,7 @@ class TrackerApp:
                 desc += "\n"
         if desc_vars.more_info != "":
             desc += desc_vars.more_info + "\n\n"
-        if desc_vars.other_pack:
-            desc += "I've also made a pack for {}: {}\n".format(desc_vars.other_game, desc_vars.other_pack_forums_link)
+        desc += "Changelog for " + desc_vars.changelog.replace("Version", "version").replace("\n", ":\n", 1) + "\n\n"
         desc += "Please don't reupload my mods to other sites. Thanks, and enjoy! :)"
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
