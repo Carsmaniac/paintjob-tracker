@@ -4,6 +4,7 @@ from tkinter import filedialog
 import configparser
 import os
 import time
+import webbrowser
 
 VEHICLE_DIRECTORY = "C:/Users/Carsmaniac/Documents/GitHub/paintjob-packer/library/vehicles"
 
@@ -22,6 +23,8 @@ BUS_RESOURCES_MODLAND = "bus.stuff/modland"
 
 MOD_LINK_PAGE = "https://github.com/Carsmaniac/paintjob-packer/blob/master/library/mod%20links.md"
 BUY_ME_A_COFFEE = "https://www.buymeacoffee.com/carsmaniac"
+
+FORUM_THREAD = {"American Truck Simulator": "https://forum.scssoft.com/viewtopic.php?f=199&t=274416", "Euro Truck Simulator 2": "https://forum.scssoft.com/viewtopic.php?f=37&t=274413"}
 
 class DescVars:
     def __init__(self, game_short, mod_name, link_formatting="none"):
@@ -141,15 +144,15 @@ class TrackerApp:
         self.variable_selected_mod.trace("w", self.load_pack)
 
         self.panel_mod = ttk.LabelFrame(self.container, text = "Mod Selection")
-        self.panel_mod.grid(row = 0, column = 0, sticky = "new", padx = 5, pady = (5, 0))
+        self.panel_mod.grid(row = 0, column = 0, columnspan = 3, sticky = "new", padx = 5, pady = (5, 0))
         self.panel_selector = ttk.Notebook(self.container)
-        self.panel_selector.grid(row = 1, column = 0, sticky = "sew", padx = 5, pady = (0, 5))
+        self.panel_selector.grid(row = 1, column = 0, columnspan = 3, sticky = "new", padx = 5, pady = 5)
         self.panel_editor = ttk.Frame(self.container)
         self.panel_selector.add(self.panel_editor, text = " Edit Paintjob Pack ")
         self.panel_description = ttk.Frame(self.container)
         self.panel_selector.add(self.panel_description, text = " Generate Description ")
         self.panel_checklist = ttk.LabelFrame(self.container, text = "Pack Checklist")
-        self.panel_checklist.grid(row = 0, rowspan = 2, column = 1, padx = (0, 5), pady = 5, sticky = "nw")
+        self.panel_checklist.grid(row = 0, rowspan = 3, column = 3, padx = (0, 5), pady = 5, sticky = "nw")
 
         self.game_select = ttk.Combobox(self.panel_mod, state = "readonly", textvariable = self.variable_game, values = ["Euro Truck Simulator 2", "American Truck Simulator"])
         self.game_select.grid(row = 0, column = 0, padx = 5, pady = 5, sticky = "news")
@@ -229,8 +232,6 @@ class TrackerApp:
         self.editor_modsbase_label.bind("<1>", lambda e: self.copy_to_clipboard(self.editor_modsbase_variable.get()))
         self.editor_modsbase_text = ttk.Entry(self.panel_editor, textvariable = self.editor_modsbase_variable, width = 40)
         self.editor_modsbase_text.grid(row = 8, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
-        self.editor_save_pack = ttk.Button(self.panel_editor, text = "Save pack", width = 30, command = lambda : self.save_pack())
-        self.editor_save_pack.grid(row = 9, column = 3, padx = 5, pady = (0, 5), sticky = "w")
 
         self.desc_mod_manager = ttk.Button(self.panel_description, text = "Mod manager", command = lambda : self.mod_manager_description())
         self.desc_mod_manager.grid(row = 0, column = 0, sticky = "news", padx = 5, pady = 5)
@@ -252,6 +253,14 @@ class TrackerApp:
         self.description_output.grid(row = 0, rowspan = 8, column = 1, sticky = "news", padx = (0,5), pady = 5)
         self.panel_description.columnconfigure(0, weight = 1)
         self.panel_description.columnconfigure(1, weight = 4)
+
+        self.bottom_open_forums = ttk.Button(self.container, text = "Open SCS Forums thread", width = 20, command = lambda : webbrowser.open_new(FORUM_THREAD[self.variable_game.get()]))
+        self.bottom_open_forums.grid(row = 2, column = 0, padx = 5, pady = (0, 5), sticky = "news")
+        self.bottom_save_pack = ttk.Button(self.container, text = "Save pack", width = 20, command = lambda : self.save_pack())
+        self.bottom_save_pack.grid(row = 2, column = 1, padx = 0, pady = (0, 5), sticky = "news")
+        self.bottom_clear_checklist = ttk.Button(self.container, text = "Clear checklist", width = 20, command = lambda : self.clear_checklist())
+        self.bottom_clear_checklist.grid(row = 2, column = 2, padx = 5, pady = (0, 5), sticky = "news")
+        self.container.rowconfigure(2, weight = 1)
 
         self.editor_bus_pack_variable = tk.BooleanVar(None, False)
         self.editor_bus_pack_checkbox = ttk.Checkbutton(self.panel_editor, text = "Bus pack", variable = self.editor_bus_pack_variable)
@@ -815,6 +824,20 @@ class TrackerApp:
         clipboard.clipboard_append(content)
         clipboard.update()
         clipboard.destroy()
+
+    def clear_checklist(self, *args):
+        checklist_variables = [self.checklist_packer_variable, self.checklist_paintjob_variable, self.checklist_icon_variable,
+                               self.checklist_screenshots_variable, self.checklist_templated_images_variable, self.checklist_upload_images_variable,
+                               self.checklist_mod_manager_variable, self.checklist_workshop_variable, self.checklist_trucky_variable,
+                               self.checklist_sharemods_variable, self.checklist_forums_variable, self.checklist_forums_link_variable,
+                               self.checklist_forums_trucky_variable, self.checklist_modland_variable, self.checklist_ets2_lt_variable,
+                               self.checklist_modland_link_variable]
+        if checklist_variables[0].get():
+            for i in range(len(checklist_variables)):
+                checklist_variables[i].set(False)
+        else:
+            for i in range(len(checklist_variables)):
+                checklist_variables[i].set(True)
 
 def format_links(self, desc_text, format):
     if format == "none":
