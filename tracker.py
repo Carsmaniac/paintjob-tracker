@@ -730,13 +730,13 @@ class TrackerApp:
         else:
             total_trucks = len(desc_vars.trucks) + len(desc_vars.truck_mods)
             total_trailers = len(desc_vars.trailers) + len(desc_vars.trailer_mods)
-            if total_trucks >= 1 and total_trailers >= 1:
-                desc += "{} trucks and {} trailers".format(total_trucks, total_trailers)
-            elif total_trucks >= 1:
-                desc += "{} trucks".format(total_trucks)
-            elif total_trailers >= 1:
-                desc += "{} trailers".format(total_trailers)
-        if len(desc_vars.paintjobs) >= 1:
+            if total_trucks > 0 and total_trailers > 0:
+                desc += "{} truck{} and {} trailer{}".format(total_trucks, "s" * (total_trucks > 1), total_trailers, "s" * (total_trailers > 1))
+            elif total_trucks > 0:
+                desc += "{} truck{}".format(total_trucks, "s" * (total_trucks > 1))
+            elif total_trailers > 0:
+                desc += "{} trailer{}".format(total_trailers, "s" * (total_trailers > 1))
+        if len(desc_vars.paintjobs) > 1:
             desc += ", with {} different paintjobs".format(len(desc_vars.paintjobs))
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
@@ -750,13 +750,13 @@ class TrackerApp:
         else:
             total_trucks = len(desc_vars.trucks) + len(desc_vars.truck_mods)
             total_trailers = len(desc_vars.trailers) + len(desc_vars.trailer_mods)
-            if total_trucks >= 1 and total_trailers >= 1:
-                desc += "{} trucks, {} trailers".format(total_trucks, total_trailers)
-            elif total_trucks >= 1:
-                desc += "{} trucks".format(total_trucks)
-            elif total_trailers >= 1:
-                desc += "{} trailers".format(total_trailers)
-        if len(desc_vars.paintjobs) >= 1:
+            if total_trucks > 0 and total_trailers > 0:
+                desc += "{} truck{}, {} trailer{}".format(total_trucks, "s" * (total_trucks > 1), total_trailers, "s" * (total_trailers > 1))
+            elif total_trucks > 0:
+                desc += "{} truck{}".format(total_trucks, "s" * (total_trucks > 1))
+            elif total_trailers > 0:
+                desc += "{} trailer{}".format(total_trailers, "s" * (total_trailers > 1))
+        if len(desc_vars.paintjobs) >=1:
             desc += ", {} different paintjobs".format(len(desc_vars.paintjobs))
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
