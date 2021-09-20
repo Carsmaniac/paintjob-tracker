@@ -64,6 +64,7 @@ class DescVars:
 
         self.image_header = selected_ini["images"]["header"]
         self.image_showcase = selected_ini["images"]["showcase"]
+        self.image_thumbnail = selected_ini["images"]["thumbnail"]
 
         self.related_mods = []
         if selected_ini["description"]["related mods"] != "":
@@ -199,39 +200,44 @@ class TrackerApp:
         self.editor_showcase_variable = tk.StringVar()
         self.editor_showcase_text = ttk.Entry(self.panel_editor, textvariable = self.editor_showcase_variable, width = 40)
         self.editor_showcase_text.grid(row = 2, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
+        self.editor_thumbnail_label = ttk.Label(self.panel_editor, text = "Thumbnail image")
+        self.editor_thumbnail_label.grid(row = 3, column = 2, padx = 5, sticky = "nw")
+        self.editor_thumbnail_variable = tk.StringVar()
+        self.editor_thumbnail_text = ttk.Entry(self.panel_editor, textvariable = self.editor_thumbnail_variable, width = 40)
+        self.editor_thumbnail_text.grid(row = 3, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
         self.editor_workshop_label = ttk.Label(self.panel_editor, text = "Steam Workshop")
-        self.editor_workshop_label.grid(row = 3, column = 2, padx = 5, sticky = "nw")
+        self.editor_workshop_label.grid(row = 4, column = 2, padx = 5, sticky = "nw")
         self.editor_workshop_variable = tk.StringVar()
         self.editor_workshop_text = ttk.Entry(self.panel_editor, textvariable = self.editor_workshop_variable, width = 40)
-        self.editor_workshop_text.grid(row = 3, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
+        self.editor_workshop_text.grid(row = 4, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
         self.editor_trucky_label = ttk.Label(self.panel_editor, text = "TruckyMods")
-        self.editor_trucky_label.grid(row = 4, column = 2, padx = 5, sticky = "nw")
+        self.editor_trucky_label.grid(row = 5, column = 2, padx = 5, sticky = "nw")
         self.editor_trucky_variable = tk.StringVar()
         self.editor_trucky_text = ttk.Entry(self.panel_editor, textvariable = self.editor_trucky_variable, width = 40)
-        self.editor_trucky_text.grid(row = 4, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
+        self.editor_trucky_text.grid(row = 5, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
         self.editor_forums_label = ttk.Label(self.panel_editor, text = "SCS Forums", cursor = "hand2")
-        self.editor_forums_label.grid(row = 5, column = 2, padx = 5, sticky = "nw")
+        self.editor_forums_label.grid(row = 6, column = 2, padx = 5, sticky = "nw")
         self.editor_forums_variable = tk.StringVar()
         self.editor_forums_label.bind("<1>", lambda e: self.copy_to_clipboard(self.editor_forums_variable.get()))
         self.editor_forums_text = ttk.Entry(self.panel_editor, textvariable = self.editor_forums_variable, width = 40)
-        self.editor_forums_text.grid(row = 5, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
+        self.editor_forums_text.grid(row = 6, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
         self.editor_modland_label = ttk.Label(self.panel_editor, text = "Modland")
-        self.editor_modland_label.grid(row = 6, column = 2, padx = 5, sticky = "nw")
+        self.editor_modland_label.grid(row = 7, column = 2, padx = 5, sticky = "nw")
         self.editor_modland_variable = tk.StringVar()
         self.editor_modland_text = ttk.Entry(self.panel_editor, textvariable = self.editor_modland_variable, width = 40)
-        self.editor_modland_text.grid(row = 6, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
+        self.editor_modland_text.grid(row = 7, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
         self.editor_sharemods_label = ttk.Label(self.panel_editor, text = "ShareMods", cursor = "hand2")
-        self.editor_sharemods_label.grid(row = 7, column = 2, padx = 5, sticky = "nw")
+        self.editor_sharemods_label.grid(row = 8, column = 2, padx = 5, sticky = "nw")
         self.editor_sharemods_variable = tk.StringVar()
         self.editor_sharemods_label.bind("<1>", lambda e: self.copy_to_clipboard(self.editor_sharemods_variable.get()))
         self.editor_sharemods_text = ttk.Entry(self.panel_editor, textvariable = self.editor_sharemods_variable, width = 40)
-        self.editor_sharemods_text.grid(row = 7, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
+        self.editor_sharemods_text.grid(row = 8, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
         self.editor_modsbase_label = ttk.Label(self.panel_editor, text = "modsBase", cursor = "hand2")
-        self.editor_modsbase_label.grid(row = 8, column = 2, padx = 5, sticky = "nw")
+        self.editor_modsbase_label.grid(row = 9, column = 2, padx = 5, sticky = "nw")
         self.editor_modsbase_variable = tk.StringVar()
         self.editor_modsbase_label.bind("<1>", lambda e: self.copy_to_clipboard(self.editor_modsbase_variable.get()))
         self.editor_modsbase_text = ttk.Entry(self.panel_editor, textvariable = self.editor_modsbase_variable, width = 40)
-        self.editor_modsbase_text.grid(row = 8, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
+        self.editor_modsbase_text.grid(row = 9, column = 3, padx = 5, pady = (0, 5), sticky = "nw")
 
         self.desc_mod_manager = ttk.Button(self.panel_description, text = "Mod manager", command = lambda : self.mod_manager_description())
         self.desc_mod_manager.grid(row = 0, column = 0, sticky = "news", padx = 5, pady = 5)
@@ -280,7 +286,7 @@ class TrackerApp:
         self.checklist_templated_images_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Make templated images and crop screenshots", variable = self.checklist_templated_images_variable)
         self.checklist_templated_images_checkbox.grid(row = 4, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
         self.checklist_upload_images_variable = tk.BooleanVar(None, False)
-        self.checklist_upload_images_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload header and showcase, add links", variable = self.checklist_upload_images_variable)
+        self.checklist_upload_images_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Upload header/showcase/thumbnail, add links", variable = self.checklist_upload_images_variable)
         self.checklist_upload_images_checkbox.grid(row = 5, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
         self.checklist_mod_manager_variable = tk.BooleanVar(None, False)
         self.checklist_mod_manager_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Generate mod manager description", variable = self.checklist_mod_manager_variable)
@@ -415,6 +421,7 @@ class TrackerApp:
 
         selected_ini["images"]["header"] = self.editor_header_variable.get()
         selected_ini["images"]["showcase"] = self.editor_showcase_variable.get()
+        selected_ini["images"]["thumbnail"] = self.editor_thumbnail_variable.get()
 
         selected_ini["links"]["steam workshop"] = self.editor_workshop_variable.get()
         selected_ini["links"]["forums"] = self.editor_forums_variable.get()
@@ -447,6 +454,7 @@ class TrackerApp:
         self.editor_bus_pack_variable.set(desc_vars.bus_pack)
         self.editor_header_variable.set(desc_vars.image_header)
         self.editor_showcase_variable.set(desc_vars.image_showcase)
+        self.editor_thumbnail_variable.set(desc_vars.image_thumbnail)
         self.editor_workshop_variable.set(desc_vars.workshop_link)
         self.editor_forums_variable.set(desc_vars.forums_link)
         self.editor_trucky_variable.set(desc_vars.trucky_link)
@@ -757,7 +765,7 @@ class TrackerApp:
     def short_forums_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
         desc = ""
-        desc += "[url={}][b][size=150]{}[/size][/b][/url] - ".format(desc_vars.forums_link[25:], desc_vars.mod_name)
+        desc += "[url={}][img]{}[/img] [b][size=150]{}[/size][/b][/url] - ".format(desc_vars.forums_link[25:], desc_vars.image_thumbnail, desc_vars.mod_name)
         if desc_vars.bus_pack:
             desc += "{} buses".format(len(desc_vars.truck_mods))
         else:
