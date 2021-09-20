@@ -561,7 +561,7 @@ class TrackerApp:
             desc += "[img]{}[/img]\n".format(IMAGE_RELATED_MODS)
             desc += "[list]\n"
             for rel in desc_vars.related_mods:
-                desc += "[*][url={}]{}[/url] - {}\n".format(rel[4], rel[0], rel[1])
+                desc += "[*][url={}]{}[/url] - {}\n".format(rel[4][25:], rel[0], rel[1])
             desc += "[/list]\n\n"
         desc += "[img]{}[/img]\n".format(IMAGE_DOWNLOAD)
         desc += "[list]\n"
