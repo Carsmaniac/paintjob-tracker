@@ -5,6 +5,7 @@ import configparser
 import os
 import time
 import webbrowser
+from datetime import date
 
 VEHICLE_DIRECTORY = "C:/Users/Carsmaniac/Documents/GitHub/paintjob-packer/library/vehicles"
 
@@ -591,6 +592,7 @@ class TrackerApp:
         desc += "[*][url={}][size=150][b][color=#c81f55]TruckyMods[/color][/b][/size] (instant install and older versions)[/url]\n".format(desc_vars.trucky_link)
         desc += "[*][url={}][size=150][b][color=#7d9ac4]Steam Workshop[/color][/b][/size] (instant install and auto-updates)[/url]\n".format(desc_vars.workshop_link)
         desc += "[/list]\n"
+        desc += "Last updated {} ({})\n\n".format(str(date.today()), desc_vars.changelog.split("\n")[0].replace("Version ", "v")) # ISO 8601 ftw
         desc += "[size=85]Please don't reupload my mods. Thanks :)[/size]"
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
