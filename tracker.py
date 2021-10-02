@@ -842,9 +842,14 @@ class TrackerApp:
                                self.checklist_sharemods_variable, self.checklist_forums_variable, self.checklist_forums_link_variable,
                                self.checklist_forums_trucky_variable, self.checklist_modland_variable, self.checklist_ets2_lt_variable,
                                self.checklist_modland_link_variable]
-        if checklist_variables[0].get():
-            for i in range(len(checklist_variables)):
-                checklist_variables[i].set(False)
+        cutoff_point = 6 # The number of checkboxes to keep ticked when updating a mod
+        if checklist_variables[cutoff_point].get():
+            for i in range(cutoff_point):
+                checklist_variables[i].set(True)
+            for i in range(len(checklist_variables) - cutoff_point):
+                checklist_variables[i + cutoff_point].set(False)
+            self.editor_sharemods_variable.set("")
+            self.editor_modsbase_variable.set("")
         else:
             for i in range(len(checklist_variables)):
                 checklist_variables[i].set(True)
