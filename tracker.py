@@ -647,9 +647,9 @@ class TrackerApp:
             desc += "    <p>{}</p>".format(desc_vars.more_info.replace("\n\n", "</p>\n    <p>"))
         if len(desc_vars.related_mods) >= 1:
             desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Related mods</p>\n"
-            desc += "    <ul>\n"
+            desc += "    <ul style=\"list-style: none; padding-left: 15px\">\n"
             for rel in desc_vars.related_mods:
-                desc += "        <li><a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a> - {}</li>\n".format(rel[3], rel[0], rel[1])
+                desc += "        <li>- <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a> - {}</li>\n".format(rel[3], rel[0], rel[1])
             desc += "    </ul>\n"
         desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Enjoy! :)</p>\n"
         desc += "    <p>Everything I make is (and always will be) free, but if you'd like to support the creation of my mods you can <a style=\"color: white; text-decoration: underline\" href=\"{}\">buy me a coffee</a>. Support isn't expected, but it is appreciated!\n".format(BUY_ME_A_COFFEE)
