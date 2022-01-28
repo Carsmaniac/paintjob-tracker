@@ -107,7 +107,7 @@ class DescVars:
 class Vehicle:
     def __init__(self, VEHICLE_DIRECTORY, game_short, file_name):
         config = configparser.ConfigParser(allow_no_value = True)
-        config.read("{}/{}/{}.ini".format(VEHICLE_DIRECTORY, game_short, file_name))
+        config.read("{}/{}/{}.ini".format(VEHICLE_DIRECTORY, game_short, file_name), encoding="utf-8")
         self.name = config["vehicle info"]["name"]
         self.file_name = file_name
         self.trailer = config["vehicle info"].getboolean("trailer")
@@ -389,7 +389,7 @@ class TrackerApp:
         selected_ini["pack info"]["truck mods"] = truck_mod_names
         selected_ini["pack info"]["trailer mods"] = trailer_mod_names
 
-        with open("{}/{}.ini".format(self.game_short, self.variable_selected_mod.get()), "w") as configfile:
+        with open("{}/{}.ini".format(self.game_short, self.variable_selected_mod.get()), "w", encoding="utf-8") as configfile:
             selected_ini.write(configfile)
 
         print("\a") # audio confirmation
