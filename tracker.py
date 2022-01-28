@@ -23,7 +23,7 @@ BUS_RESOURCES_TRUCKY = "bus.stuff/trucky"
 BUS_RESOURCES_MODLAND = "bus.stuff/modland"
 
 MOD_LINK_PAGE = "https://github.com/Carsmaniac/paintjob-packer/blob/master/library/mod%20links.md"
-BUY_ME_A_COFFEE = "https://www.buymeacoffee.com/carsmaniac"
+KOFI_PAGE = "https://www.buymeacoffee.com/carsmaniac"
 
 FORUM_THREAD = {"American Truck Simulator": "https://forum.scssoft.com/viewtopic.php?f=199&t=274416", "Euro Truck Simulator 2": "https://forum.scssoft.com/viewtopic.php?f=37&t=274413"}
 
@@ -530,7 +530,7 @@ class TrackerApp:
             desc += "\n"
         desc += "[img]{}[/img]\n".format(IMAGE_ENJOY)
         desc += "Please don't reupload my mods to other sites. They're already available elsewhere, if you'd like to download them directly. Thanks :)\n\n"
-        desc += "Everything I make is (and always will be) free, but if you'd like to support the creation of my mods you can [url={}]buy me a coffee.[/url]\nSupport isn't expected, but it is appreciated!\n\n".format(BUY_ME_A_COFFEE)
+        desc += "Everything I make is (and always will be) free, but if you'd like to support the creation of my mods you can [url={}]support me on Ko-fi.[/url]\nSupport isn't expected, but it is appreciated!\n\n".format(KOFI_PAGE)
         desc += "You can [url=https://steamcommunity.com/id/carsmaniac/myworkshopfiles/]follow me on the Workshop[/url] to see more!"
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
