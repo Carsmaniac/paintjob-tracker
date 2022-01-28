@@ -496,7 +496,10 @@ class TrackerApp:
         if desc_vars.bus_pack:
             desc += "[img]{}[/img]\n".format(IMAGE_BUSES_SUPPORTED)
             for veh in desc_vars.truck_mods:
-                desc += "- {}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
+                if veh.mod_link("wtfa") == veh.mod_link_author_site:
+                    desc += "- {}'s {} [url={}](Link)[/url]\n".format(veh.mod_author, veh.name, veh.mod_link("wtfa")) # If link is removed by Steam, the vehicle name stays visible
+                else:
+                    desc += "- {}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
             desc += "\n"
         else:
             if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
@@ -506,7 +509,10 @@ class TrackerApp:
                         desc += "- " + veh.name + "\n"
                 if len(desc_vars.truck_mods) >= 1:
                     for veh in desc_vars.truck_mods:
-                        desc += "- {}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
+                        if veh.mod_link("wtfa") == veh.mod_link_author_site:
+                            desc += "- {}'s {} [url={}](Link)[/url]\n".format(veh.mod_author, veh.name, veh.mod_link("wtfa"))
+                        else:
+                            desc += "- {}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
                 desc += "\n"
             if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
                 desc += "[img]{}[/img]\n".format(IMAGE_TRAILERS_SUPPORTED)
@@ -515,7 +521,10 @@ class TrackerApp:
                         desc += "- " + veh.name + "\n"
                 if len(desc_vars.trailer_mods) >= 1:
                     for veh in desc_vars.trailer_mods:
-                        desc += "- {}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
+                        if veh.mod_link("wtfa") == veh.mod_link_author_site:
+                            desc += "- {}'s {} [url={}](Link)[/url]\n".format(veh.mod_author, veh.name, veh.mod_link("wtfa"))
+                        else:
+                            desc += "- {}'s [url={}]{}[/url]\n".format(veh.mod_author, veh.mod_link("wtfa"), veh.name)
                 desc += "\n"
         if self.game_short == "ets":
             desc += "Let me know in the comments if you'd like to see any other vehicles supported, including any of [url={}#euro-truck-simulator-2]these mods![/url]\n\n".format(MOD_LINK_PAGE)
