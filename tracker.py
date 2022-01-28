@@ -542,7 +542,7 @@ class TrackerApp:
         desc += "Everything I make is (and always will be) free, but if you'd like to support the creation of my mods you can [url={}]support me on Ko-fi.[/url]\nSupport isn't expected, but it is appreciated!\n\n".format(KOFI_PAGE)
         desc += "You can [url=https://steamcommunity.com/id/carsmaniac/myworkshopfiles/]follow me on the Workshop[/url] to see more!"
         self.description_output.delete("1.0", "end")
-        self.description_output.insert("1.0", desc)
+        self.description_output.insert("1.0", desc.rstrip())
 
     def forums_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "bbcode")
@@ -604,7 +604,7 @@ class TrackerApp:
         desc += "Last updated {} ({})\n\n".format(str(date.today()), desc_vars.changelog.split("\n")[0].replace("Version ", "v")) # ISO 8601 ftw
         desc += "[size=85]Please don't reupload my mods. Thanks :)[/size]"
         self.description_output.delete("1.0", "end")
-        self.description_output.insert("1.0", desc)
+        self.description_output.insert("1.0", desc.rstrip())
 
     def trucky_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "wysiwyg")
@@ -652,7 +652,7 @@ class TrackerApp:
                 desc += ">{}{} - {}\n".format(rel[0], rel[3], rel[1])
         desc += "Enjoy! :)\n"
         self.description_output.delete("1.0", "end")
-        self.description_output.insert("1.0", desc)
+        self.description_output.insert("1.0", desc.rstrip())
 
     def modland_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "txt")
@@ -696,7 +696,7 @@ class TrackerApp:
             desc += "I've also made a pack for {}:\n{}\n\n".format(desc_vars.other_game, desc_vars.other_pack_modland_link)
         desc += "Please don't reupload my mods to other sites. Thanks, and enjoy! :)"
         self.description_output.delete("1.0", "end")
-        self.description_output.insert("1.0", desc)
+        self.description_output.insert("1.0", desc.rstrip())
 
     def ets2_lt_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "txt")
@@ -739,7 +739,7 @@ class TrackerApp:
         desc += "Changelog for " + desc_vars.changelog.replace("Version", "version").replace("\n", ":\n", 1) + "\n\n"
         desc += "Please don't reupload my mods to other sites. Thanks, and enjoy! :)"
         self.description_output.delete("1.0", "end")
-        self.description_output.insert("1.0", desc)
+        self.description_output.insert("1.0", desc.rstrip())
 
     def short_trucky_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
@@ -757,9 +757,9 @@ class TrackerApp:
             elif total_trailers > 0:
                 desc += "{} trailer{}".format(total_trailers, "s" * (total_trailers > 1))
         if len(desc_vars.paintjobs) > 1:
-            desc += ", with {} different paintjobs".format(len(desc_vars.paintjobs))
+            desc += ", with {} different paint jobs".format(len(desc_vars.paintjobs))
         self.description_output.delete("1.0", "end")
-        self.description_output.insert("1.0", desc)
+        self.description_output.insert("1.0", desc.rstrip())
 
     def short_forums_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
@@ -777,9 +777,9 @@ class TrackerApp:
             elif total_trailers > 0:
                 desc += "{} trailer{}".format(total_trailers, "s" * (total_trailers > 1))
         if len(desc_vars.paintjobs) >=1:
-            desc += ", {} different paintjobs".format(len(desc_vars.paintjobs))
+            desc += ", {} different paint jobs".format(len(desc_vars.paintjobs))
         self.description_output.delete("1.0", "end")
-        self.description_output.insert("1.0", desc)
+        self.description_output.insert("1.0", desc.rstrip())
 
     def mod_manager_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "txt")
@@ -822,7 +822,7 @@ class TrackerApp:
             desc += desc_vars.more_info + "\n\n"
         desc += "Please don't reupload my mods. Thanks, and enjoy! :)\n"
         self.description_output.delete("1.0", "end")
-        self.description_output.insert("1.0", desc)
+        self.description_output.insert("1.0", desc.rstrip())
 
     def copy_to_clipboard(self, content, *args):
         clipboard = tk.Tk()
