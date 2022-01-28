@@ -607,62 +607,50 @@ class TrackerApp:
         self.description_output.insert("1.0", desc)
 
     def trucky_description(self, *args):
-        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "html")
+        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "wysiwyg")
         desc = ""
-        desc += "<div> <!-- Cars was here ;) -->\n"
-        desc += "    <p>{}</p>\n".format(desc_vars.short_description.replace("\n\n", "</p>\n    <p>"))
+        # desc += "Links to >, h2 headings, ul lists, h1 Enjoy\n"
+        desc += "{}\n".format(desc_vars.short_description.replace("\n\n", "\n"))
         if desc_vars.bus_pack:
-            desc += "    <p style=\"font-weight: 700\">This mod requires my <a style=\"color: white; text-decoration: underline\" href=\"{}\">bus resource pack</a>to work!</p>\n".format(BUS_RESOURCES_TRUCKY)
+            desc += "This mod requires my >bus resource pack{} to work!\n".format(BUS_RESOURCES_TRUCKY)
         if desc_vars.other_pack:
-            desc += "    <p>{} pack available <a style=\"color: white; text-decoration: underline\" href=\"{}\">here</a>.</p>\n".format(desc_vars.other_game, desc_vars.other_pack_trucky_link)
+            desc += "{} pack available >here{}\n".format(desc_vars.other_game, desc_vars.other_pack_trucky_link)
         if len(desc_vars.paintjobs) >= 1:
-            desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Paintjobs included</p>\n"
-            desc += "    <ul style=\"list-style: none; padding-left: 15px\">\n"
+            desc += "Paint jobs included\n"
             for pj in desc_vars.paintjobs:
-                desc += "        <li>- {}</li>\n".format(pj)
-            desc += "    </ul>\n"
+                desc += "{}\n".format(pj)
         if desc_vars.bus_pack:
-            desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Buses supported</p>\n"
-            desc += "    <ul style=\"list-style: none; padding-left: 15px\">\n"
+            desc += "Buses supported\n"
             for veh in desc_vars.truck_mods:
-                desc += "        <li>- {}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link("tfaw"), veh.name)
-            desc += "    </ul>\n"
+                desc += "{}'s >{}{}\n".format(veh.mod_author, veh.name, veh.mod_link("tfaw"))
         else:
             if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
-                desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Trucks supported</p>\n"
-                desc += "    <ul style=\"list-style: none; padding-left: 15px\">\n"
+                desc += "Trucks supported\n"
                 if len(desc_vars.trucks) >= 1:
                     for veh in desc_vars.trucks:
-                        desc += "        <li>- {}</li>\n".format(veh.name)
+                        desc += "{}\n".format(veh.name)
                 if len(desc_vars.truck_mods) >= 1:
                     for veh in desc_vars.truck_mods:
-                        desc += "        <li>- {}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link("tfaw"), veh.name)
-                desc += "    </ul>\n"
+                        desc += "{}'s >{}{}\n".format(veh.mod_author, veh.name, veh.mod_link("tfaw"))
             if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
-                desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Trailers supported</p>\n"
-                desc += "    <ul style=\"list-style: none; padding-left: 15px\">\n"
+                desc += "Trailers supported\n"
                 if len(desc_vars.trailers) >= 1:
                     for veh in desc_vars.trailers:
-                        desc += "        <li>- {}</li>\n".format(veh.name)
+                        desc += "{}\n".format(veh.name)
                 if len(desc_vars.trailer_mods) >= 1:
                     for veh in desc_vars.trailer_mods:
-                        desc += "        <li>- {}'s <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a></li>\n".format(veh.mod_author, veh.mod_link("tfaw"), veh.name)
-                desc += "    </ul>\n"
+                        desc += "{}'s >{}{}\n".format(veh.mod_author, veh.name, veh.mod_link("tfaw"))
         if self.game_short == "ets":
-            desc += "    <p>Let me know in the comments if you'd like to see any other vehicles supported, including any of <a style=\"color: white; text-decoration: underline\" href=\"{}#euro-truck-simulator-2\">these mods!</a></p>\n".format(MOD_LINK_PAGE)
+            desc += "Let me know in the comments if you'd like to see any other vehicles supported, including any of >these mods!{}#euro-truck-simulator-2\n".format(MOD_LINK_PAGE)
         else:
-            desc += "    <p>Let me know in the comments if you'd like to see any other vehicles supported, including any of <a style=\"color: white; text-decoration: underline\" href=\"{}#american-truck-simulator\">these mods!</a></p>\n".format(MOD_LINK_PAGE)
+            desc += "Let me know in the comments if you'd like to see any other vehicles supported, including any of >these mods!{}#american-truck-simulator\n".format(MOD_LINK_PAGE)
         if desc_vars.more_info != "":
-            desc += "    <p>{}</p>".format(desc_vars.more_info.replace("\n\n", "</p>\n    <p>"))
+            desc += "{}\n".format(desc_vars.more_info.replace("\n\n", "\n"))
         if len(desc_vars.related_mods) >= 1:
-            desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Related mods</p>\n"
-            desc += "    <ul style=\"list-style: none; padding-left: 15px\">\n"
+            desc += "Related mods\n"
             for rel in desc_vars.related_mods:
-                desc += "        <li>- <a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a> - {}</li>\n".format(rel[3], rel[0], rel[1])
-            desc += "    </ul>\n"
-        desc += "    <p style=\"color: white; font-family: Montserrat, sans-serif; font-size: 24px; font-weight: 700\">Enjoy! :)</p>\n"
-        desc += "    <p>Everything I make is (and always will be) free, but if you'd like to support the creation of my mods you can <a style=\"color: white; text-decoration: underline\" href=\"{}\">buy me a coffee</a>. Support isn't expected, but it is appreciated!\n".format(BUY_ME_A_COFFEE)
-        desc += "</div>"
+                desc += ">{}{} - {}\n".format(rel[0], rel[3], rel[1])
+        desc += "Enjoy! :)\n"
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc)
 
@@ -881,8 +869,8 @@ def format_links(self, desc_text, format):
             link = md_link[1:-1].split("](")
             if format == "bbcode":
                 output_link = "[url={}]{}[/url]".format(link[1], link[0])
-            elif format == "html":
-                output_link = "<a style=\"color: white; text-decoration: underline\" href=\"{}\">{}</a>".format(link[1], link[0])
+            elif format == "wysiwyg":
+                output_link = ">{}{}".format(link[0], link[1])
             elif format == "txt":
                 output_link = link[0]
             return desc_text[:link_start[0]] + output_link + desc_text[link_end[0]:]
