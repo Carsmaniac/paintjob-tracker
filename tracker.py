@@ -9,7 +9,7 @@ from datetime import date
 
 VEHICLE_DIRECTORY = "C:/Users/Carsmaniac/Documents/GitHub/paintjob-packer/library/vehicles"
 
-IMAGE_PAINTJOBS_INCLUDED = "https://i.imgur.com/evSjSpv.png"
+IMAGE_PAINTJOBS_INCLUDED = "https://i.imgur.com/9MR70pV.png"
 IMAGE_TRUCKS_SUPPORTED = "https://i.imgur.com/EjcBoVh.png"
 IMAGE_TRAILERS_SUPPORTED = "https://i.imgur.com/MzOsazO.png"
 IMAGE_BUSES_SUPPORTED = "https://i.imgur.com/lbD4wqg.png"
@@ -150,7 +150,7 @@ class TrackerApp:
         self.panel_selector = ttk.Notebook(self.container)
         self.panel_selector.grid(row = 1, column = 0, columnspan = 3, sticky = "new", padx = 5, pady = 5)
         self.panel_editor = ttk.Frame(self.container)
-        self.panel_selector.add(self.panel_editor, text = " Edit Paintjob Pack ")
+        self.panel_selector.add(self.panel_editor, text = " Edit Paint Job Pack ")
         self.panel_description = ttk.Frame(self.container)
         self.panel_selector.add(self.panel_description, text = " Generate Description ")
         self.panel_checklist = ttk.LabelFrame(self.container, text = "Pack Checklist")
@@ -163,7 +163,7 @@ class TrackerApp:
         self.panel_mod.columnconfigure(0, weight = 1)
         self.panel_mod.columnconfigure(1, weight = 6)
 
-        self.editor_paintjobs_label = ttk.Label(self.panel_editor, text = "Paintjobs")
+        self.editor_paintjobs_label = ttk.Label(self.panel_editor, text = "Paint jobs")
         self.editor_paintjobs_label.grid(row = 0, column = 0, padx = 5, pady = 5, sticky = "nw")
         self.editor_paintjobs_text = tk.Text(self.panel_editor, height = 2.5, width = 35)
         self.editor_paintjobs_text.grid(row = 0, rowspan = 2, column = 1, padx = 5, pady = 5)
@@ -272,10 +272,10 @@ class TrackerApp:
         self.editor_bus_pack_variable = tk.BooleanVar(None, False)
         self.editor_bus_pack_checkbox = ttk.Checkbutton(self.panel_editor, text = "Bus pack", variable = self.editor_bus_pack_variable)
         self.checklist_packer_variable = tk.BooleanVar(None, False)
-        self.checklist_packer_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Generate files with Paintjob Packer", variable = self.checklist_packer_variable)
+        self.checklist_packer_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Generate files with Paint Job Packer", variable = self.checklist_packer_variable)
         self.checklist_packer_checkbox.grid(row = 0, column = 0, padx = 5, pady = 5, sticky = "nw")
         self.checklist_paintjob_variable = tk.BooleanVar(None, False)
-        self.checklist_paintjob_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Make paintjob textures", variable = self.checklist_paintjob_variable)
+        self.checklist_paintjob_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Make paint job textures", variable = self.checklist_paintjob_variable)
         self.checklist_paintjob_checkbox.grid(row = 1, column = 0, padx = 5, pady = (0, 5), sticky = "nw")
         self.checklist_icon_variable = tk.BooleanVar(None, False)
         self.checklist_icon_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Make in-game icon", variable = self.checklist_icon_variable)
@@ -665,7 +665,7 @@ class TrackerApp:
             desc += ">> This mod requires my bus resource pack to work! <<\n"
             desc += "Download it here: {}\n\n".format(BUS_RESOURCES_MODLAND)
         if len(desc_vars.paintjobs) >= 1:
-            desc += "Paintjobs included:\n"
+            desc += "Paint jobs included:\n"
             for pj in desc_vars.paintjobs:
                 desc += "- {}\n".format(pj)
             desc += "\n"
@@ -709,7 +709,7 @@ class TrackerApp:
             desc += ">> This mod requires my bus resource pack to work! <<\n"
             desc += "Download it here: {}\n\n".format(BUS_RESOURCES_FORUMS)
         if len(desc_vars.paintjobs) >= 1:
-            desc += "Paintjobs included:\n"
+            desc += "Paint jobs included:\n"
             for pj in desc_vars.paintjobs:
                 desc += "- {}\n".format(pj)
             desc += "\n"
@@ -747,7 +747,7 @@ class TrackerApp:
     def short_trucky_description(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
         desc = ""
-        desc += "A pack of {} paintjobs supporting ".format(desc_vars.mod_name.replace(" Paintjob Pack", ""))
+        desc += "A pack of {} paint jobs supporting ".format(desc_vars.mod_name.replace(" Paint Job Pack", ""))
         if desc_vars.bus_pack:
             desc += "{} buses".format(len(desc_vars.truck_mods))
         else:
@@ -793,7 +793,7 @@ class TrackerApp:
         if desc_vars.other_pack:
             desc += "{} pack also available\n\n".format(desc_vars.other_game)
         if len(desc_vars.paintjobs) >= 1:
-            desc += "Paintjobs included:\n"
+            desc += "Paint jobs included:\n"
             for pj in desc_vars.paintjobs:
                 desc += "- {}\n".format(pj)
             desc += "\n"
@@ -882,7 +882,7 @@ def format_links(self, desc_text, format):
 
 def main():
     root = tk.Tk()
-    root.title("Paintjob Tracker")
+    root.title("Paint Job Tracker")
     root.resizable(False, False)
     tracker = TrackerApp(root)
     root.mainloop()
