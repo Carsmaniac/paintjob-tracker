@@ -736,6 +736,11 @@ class TrackerApp:
                 desc += "\n"
         if desc_vars.more_info != "":
             desc += desc_vars.more_info + "\n\n"
+        if desc_vars.other_pack:
+            if desc_vars.other_game == "American Truck Simulator":
+                desc += "I've also made a pack for American Truck Simulator, you can find it on atsmods.lt\n\n"
+            else:
+                desc += "I've also made a pack for Euro Truck Simualtor 2, you can find it on ets2.lt\n\n"
         desc += "Changelog for " + desc_vars.changelog.replace("Version", "version").replace("\n", ":\n", 1) + "\n\n"
         desc += "Please don't reupload my mods to other sites. Thanks, and enjoy! :)"
         self.description_output.delete("1.0", "end")
