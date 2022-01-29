@@ -350,22 +350,22 @@ class TrackerApp:
         for truck in selected_ini["pack info"]["trucks"].split(";"):
             if truck != "":
                 trucks.append(Vehicle(VEHICLE_DIRECTORY, self.game_short, truck))
-        trucks.sort(key = lambda veh: veh.name)
+        trucks.sort(key = lambda veh: veh.name.lower())
         truck_mods = []
         for truck_mod in selected_ini["pack info"]["truck mods"].split(";"):
             if truck_mod != "":
                 truck_mods.append(Vehicle(VEHICLE_DIRECTORY, self.game_short, truck_mod))
-        truck_mods.sort(key = lambda veh: veh.name)
+        truck_mods.sort(key = lambda veh: veh.name.lower())
         trailers = []
         for trailer in selected_ini["pack info"]["trailers"].split(";"):
             if trailer != "":
                 trailers.append(Vehicle(VEHICLE_DIRECTORY, self.game_short, trailer))
-        trailers.sort(key = lambda veh: veh.name)
+        trailers.sort(key = lambda veh: veh.name.lower())
         trailer_mods = []
         for trailer_mod in selected_ini["pack info"]["trailer mods"].split(";"):
             if trailer_mod != "":
                 trailer_mods.append(Vehicle(VEHICLE_DIRECTORY, self.game_short, trailer_mod))
-        trailer_mods.sort(key = lambda veh: veh.name)
+        trailer_mods.sort(key = lambda veh: veh.name.lower())
 
         truck_names = []
         for veh in trucks:
