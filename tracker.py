@@ -186,8 +186,8 @@ class TrackerApp:
         self.editor_changelog_text = tk.Text(self.panel_editor, height = 2.5, width = 35)
         self.editor_changelog_text.grid(row = 8, rowspan = 2, column = 1, padx = 5, pady = (0, 5))
         self.editor_changelog_label.bind("<1>", lambda e: self.copy_to_clipboard(self.editor_changelog_text.get("1.0", "end").rstrip()))
-        self.editor_bus_pack_variable = tk.BooleanVar(None, False)
-        self.editor_bus_pack_checkbox = ttk.Checkbutton(self.panel_editor, text = "Bus pack", variable = self.editor_bus_pack_variable)
+        self.editor_bus_pack_variable = tk.IntVar(None, 0)
+        self.editor_bus_pack_checkbox = ttk.Checkbutton(self.panel_editor, text = "Bus pack", variable = self.editor_bus_pack_variable, onvalue = 1, offvalue = 0)
         self.editor_bus_pack_checkbox.grid(row = 0, column = 2, padx = 5, pady = 5, sticky = "w")
         self.editor_sort_vehicles = ttk.Button(self.panel_editor, text = "Sort vehicles", width = 20, command = lambda : self.sort_vehicles())
         self.editor_sort_vehicles.grid(row = 0, column = 3, padx = 5, pady = 5, sticky = "w")
@@ -269,8 +269,6 @@ class TrackerApp:
         self.bottom_clear_checklist.grid(row = 2, column = 2, padx = 5, pady = (0, 5), sticky = "news")
         self.container.rowconfigure(2, weight = 1)
 
-        self.editor_bus_pack_variable = tk.BooleanVar(None, False)
-        self.editor_bus_pack_checkbox = ttk.Checkbutton(self.panel_editor, text = "Bus pack", variable = self.editor_bus_pack_variable)
         self.checklist_packer_variable = tk.BooleanVar(None, False)
         self.checklist_packer_checkbox = ttk.Checkbutton(self.panel_checklist, text = "Generate files with Paint Job Packer", variable = self.checklist_packer_variable)
         self.checklist_packer_checkbox.grid(row = 0, column = 0, padx = 5, pady = 5, sticky = "nw")
@@ -400,7 +398,10 @@ class TrackerApp:
         selected_ini.optionxform = str
         selected_ini.read("{}/{}.ini".format(self.game_short, self.variable_selected_mod.get()), encoding = "utf-8")
 
-        selected_ini["pack info"]["bus pack"] = str(self.editor_bus_pack_variable.get())
+        if self.editor_bus_pack_variable.get() == 1:
+            selected_ini["pack info"]["bus pack"] = "True"
+        else:
+            selected_ini["pack info"]["bus pack"] = "False"
         selected_ini["pack info"]["paintjobs"] = self.editor_paintjobs_text.get("1.0", "end").rstrip().replace("\n", ";")
 
         checklist_variables = [self.checklist_packer_variable, self.checklist_paintjob_variable, self.checklist_icon_variable,
@@ -452,7 +453,10 @@ class TrackerApp:
         self.editor_related_mods_text.insert("1.0", "\n".join(related_mods))
         self.editor_changelog_text.delete("1.0", "end")
         self.editor_changelog_text.insert("1.0", desc_vars.changelog)
-        self.editor_bus_pack_variable.set(desc_vars.bus_pack)
+        if desc_vars.bus_pack:
+            self.editor_bus_pack_variable.set(1)
+        else:
+            self.editor_bus_pack_variable.set(0)
         self.editor_header_variable.set(desc_vars.image_header)
         self.editor_showcase_variable.set(desc_vars.image_showcase)
         self.editor_thumbnail_variable.set(desc_vars.image_thumbnail)
