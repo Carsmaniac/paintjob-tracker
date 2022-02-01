@@ -23,7 +23,7 @@ BUS_RESOURCES_TRUCKY = "bus.stuff/trucky"
 BUS_RESOURCES_MODLAND = "bus.stuff/modland"
 
 MOD_LINK_PAGE = "https://github.com/Carsmaniac/paintjob-packer/blob/master/library/mod%20links.md"
-KOFI_PAGE = "https://www.buymeacoffee.com/carsmaniac"
+KOFI_PAGE = "https://ko-fi.com/carsmaniac"
 
 FORUM_THREAD = {"American Truck Simulator": "https://forum.scssoft.com/viewtopic.php?f=199&t=274416", "Euro Truck Simulator 2": "https://forum.scssoft.com/viewtopic.php?f=37&t=274413"}
 
