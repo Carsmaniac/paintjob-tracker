@@ -393,9 +393,6 @@ class TrackerApp:
         with open("{}/{}.ini".format(self.game_short, self.variable_selected_mod.get()), "w", encoding="utf-8") as configfile:
             selected_ini.write(configfile)
 
-        print("\a") # audio confirmation
-        print("\a")
-
     def save_pack(self, *args):
         selected_ini = configparser.ConfigParser(allow_no_value = True)
         selected_ini.optionxform = str
@@ -487,6 +484,7 @@ class TrackerApp:
             self.variable_directory.set(new_directory)
 
     def workshop_description(self, *args):
+        self.sort_vehicles()
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "bbcode")
         desc = ""
         desc += "[img]{}[/img]\n".format(desc_vars.image_header)
@@ -552,6 +550,7 @@ class TrackerApp:
         self.description_output.insert("1.0", desc.rstrip())
 
     def forums_description(self, *args):
+        self.sort_vehicles()
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "bbcode")
         desc = ""
         desc += "[img]{}[/img]\n\n".format(desc_vars.image_showcase)
@@ -614,6 +613,7 @@ class TrackerApp:
         self.description_output.insert("1.0", desc.rstrip())
 
     def trucky_description(self, *args):
+        self.sort_vehicles()
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "wysiwyg")
         desc = ""
         # desc += "Links to >, h2 headings, ul lists, h1 Enjoy\n"
@@ -662,6 +662,7 @@ class TrackerApp:
         self.description_output.insert("1.0", desc.rstrip())
 
     def modland_description(self, *args):
+        self.sort_vehicles()
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "txt")
         desc = ""
         desc += desc_vars.short_description + "\n\n"
@@ -706,6 +707,7 @@ class TrackerApp:
         self.description_output.insert("1.0", desc.rstrip())
 
     def ets2_lt_description(self, *args):
+        self.sort_vehicles()
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "txt")
         desc = ""
         desc += desc_vars.short_description + "\n\n"
@@ -794,6 +796,7 @@ class TrackerApp:
         self.description_output.insert("1.0", desc.rstrip())
 
     def mod_manager_description(self, *args):
+        self.sort_vehicles()
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "txt")
         desc = ""
         desc += desc_vars.short_description + "\n\n"
