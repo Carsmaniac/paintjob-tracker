@@ -262,8 +262,10 @@ class TrackerApp:
         self.desc_modland.grid(row = 6, column = 0, sticky = "news", padx = 5, pady = (0, 5))
         self.desc_ets2_lt = ttk.Button(self.panel_description, text = "ets2.lt", command = lambda : self.ets2_lt_description())
         self.desc_ets2_lt.grid(row = 7, column = 0, sticky = "news", padx = 5, pady = (0, 5))
+        self.desc_kofi = ttk.Button(self.panel_description, text = "Ko-fi", command = lambda : self.kofi_description())
+        self.desc_kofi.grid(row = 8, column = 0, sticky = "news", padx = 5, pady = (0, 5))
         self.description_output = tk.Text(self.panel_description, height = 17.4)
-        self.description_output.grid(row = 0, rowspan = 8, column = 1, sticky = "news", padx = (0,5), pady = 5)
+        self.description_output.grid(row = 0, rowspan = 9, column = 1, sticky = "news", padx = (0,5), pady = 5)
         self.panel_description.columnconfigure(0, weight = 1)
         self.panel_description.columnconfigure(1, weight = 4)
 
@@ -326,6 +328,8 @@ class TrackerApp:
 
         self.game_short = ""
         self.update_selectable_mods(self)
+        if os.path.exists("kofi-updates.txt"):
+            self.load_kofi_updates()
 
     def update_selectable_mods(self, *args):
         game_short_dict = {"Euro Truck Simulator 2":"ets", "American Truck Simulator":"ats"}
@@ -440,6 +444,16 @@ class TrackerApp:
 
         print("\a") # audio confirmation
         print("\a")
+
+        file = open("kofi-updates.txt", "r", encoding="utf-8")
+        lines = file.readlines()
+        file.close()
+        if "{};{}\n".format(self.variable_selected_mod.get(), self.game_short) not in lines:
+            lines.append("{};{}\n".format(self.variable_selected_mod.get(), self.game_short))
+        file = open("kofi-updates.txt", "w", encoding="utf-8")
+        for line in lines:
+            file.write(line)
+        file.close()
 
     def load_pack(self, *args):
         desc_vars = DescVars(self.game_short, self.variable_selected_mod.get())
@@ -848,6 +862,64 @@ class TrackerApp:
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc.rstrip())
 
+    def kofi_description(self, *args):
+        self.sort_vehicles()
+        desc_vars = DescVars(self.game_short, self.variable_selected_mod.get(), "wysiwyg")
+        desc = ""
+        desc += "Note: select all, bullet points, un-bullet points to fix the newline formatting. (info here)\n\n"
+        desc += ">Download it here{}\n".format(desc_vars.trucky_link)
+        desc += "Also available on the >SCS Forums{} and >Steam Workshop{}\n\n".format(desc_vars.forums_link, desc_vars.workshop_link)
+        if len(self.kofi_updated_packs) >= 1:
+            desc += "In the past week I've also updated:\n"
+            for update in self.kofi_updated_packs:
+                if not (update["name"] == self.variable_selected_mod.get() and update["short_game"] == self.game_short):
+                    desc += ">{} ({}){}\n".format(update["name"], update["game"], update["link"])
+            desc += "\n"
+        desc += "{}\n".format(desc_vars.short_description)
+        if desc_vars.bus_pack:
+            desc += "\nThis mod requires my >bus resource pack{} to work!\n\n".format(BUS_RESOURCES_TRUCKY)
+        if desc_vars.other_pack:
+            desc += "\nI've also made a pack for {}, which you can >download here{}\n".format(desc_vars.other_game, desc_vars.other_pack_trucky_link)
+        if len(desc_vars.paintjobs) >= 1:
+            desc += "\nPaint jobs included\n"
+            for pj in desc_vars.paintjobs:
+                desc += "{}\n".format(pj)
+        if desc_vars.bus_pack:
+            desc += "\nBuses supported\n"
+            for veh in desc_vars.truck_mods:
+                desc += "{}'s >{}{}\n".format(veh.mod_author, veh.name, veh.mod_link("tfaw"))
+        else:
+            if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
+                desc += "\nTrucks supported\n"
+                if len(desc_vars.trucks) >= 1:
+                    for veh in desc_vars.trucks:
+                        desc += "{}\n".format(veh.name)
+                if len(desc_vars.truck_mods) >= 1:
+                    for veh in desc_vars.truck_mods:
+                        desc += "{}'s >{}{}\n".format(veh.mod_author, veh.name, veh.mod_link("tfaw"))
+            if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
+                desc += "\nTrailers supported\n"
+                if len(desc_vars.trailers) >= 1:
+                    for veh in desc_vars.trailers:
+                        desc += "{}\n".format(veh.name)
+                if len(desc_vars.trailer_mods) >= 1:
+                    for veh in desc_vars.trailer_mods:
+                        desc += "{}'s >{}{}\n".format(veh.mod_author, veh.name, veh.mod_link("tfaw"))
+        if desc_vars.more_info != "":
+            desc += "\n{}\n".format(desc_vars.more_info.replace("\n\n", "\n"))
+        desc += "\n\nEnjoy! :)"
+        self.description_output.delete("1.0", "end")
+        self.description_output.insert("1.0", desc.rstrip())
+
+        print("Emptied kofi-updates.txt, previous contents:\n")
+        file = open("kofi-updates.txt", "r", encoding="utf-8")
+        lines = file.readlines()
+        file.close()
+        for line in lines:
+            print(line)
+        file = open("kofi-updates.txt", "w")
+        file.close()
+
     def copy_to_clipboard(self, content, *args):
         clipboard = tk.Tk()
         clipboard.withdraw()
@@ -874,6 +946,21 @@ class TrackerApp:
         else:
             for i in range(len(checklist_variables)):
                 checklist_variables[i].set(True)
+
+    def load_kofi_updates(self):
+        file = open("kofi-updates.txt", "r", encoding="utf-8")
+        lines = file.readlines()
+        lines.sort()
+        file.close()
+        self.kofi_updated_packs = []
+        for line in lines:
+            pack_name, pack_game = line.split(";")
+            pack_game = pack_game.rstrip()
+            other_ini = configparser.ConfigParser(allow_no_value = True)
+            other_ini.read("{}/{}.ini".format(pack_game, pack_name), encoding = "utf-8")
+            other_link = other_ini["links"]["trucky"]
+            other_game = {"ets": "ETS 2", "ats": "ATS"}[pack_game]
+            self.kofi_updated_packs.append({"name": pack_name, "game": other_game, "link": other_link, "short_game": pack_game})
 
 def format_links(self, desc_text, format):
     if format == "none":
