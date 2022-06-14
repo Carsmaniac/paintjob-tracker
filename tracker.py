@@ -678,31 +678,31 @@ class TrackerApp:
         if len(desc_vars.paintjobs) >= 1:
             desc += "Paint jobs included:\n"
             for pj in desc_vars.paintjobs:
-                desc += "- {}\n".format(pj)
+                desc += "{}\n".format(pj)
             desc += "\n"
         if desc_vars.bus_pack:
             desc += "Buses supported:\n"
             for veh in desc_vars.truck_mods:
-                desc += "- {}'s {}\n".format(veh.mod_author, veh.name)
+                desc += "{}'s >{}{}\n".format(veh.mod_author, veh.name, veh.mod_link("wfta"))
             desc += "\n"
         else:
             if len(desc_vars.trucks) + len(desc_vars.truck_mods) >= 1:
                 desc += "Trucks supported:\n"
                 if len(desc_vars.trucks) >= 1:
                     for veh in desc_vars.trucks:
-                        desc += "- {}\n".format(veh.name)
+                        desc += "{}\n".format(veh.name)
                 if len(desc_vars.truck_mods) >= 1:
                     for veh in desc_vars.truck_mods:
-                        desc += "- {}'s {}\n".format(veh.mod_author, veh.name)
+                        desc += "{}'s >{}{}\n".format(veh.mod_author, veh.name, veh.mod_link("wfta"))
                 desc += "\n"
             if len(desc_vars.trailers) + len(desc_vars.trailer_mods) >= 1:
                 desc += "Trailers supported:\n"
                 if len(desc_vars.trailers) >= 1:
                     for veh in desc_vars.trailers:
-                        desc += "- {}\n".format(veh.name)
+                        desc += "{}\n".format(veh.name)
                 if len(desc_vars.trailer_mods) >= 1:
                     for veh in desc_vars.trailer_mods:
-                        desc += "- {}'s {}\n".format(veh.mod_author, veh.name)
+                        desc += "{}'s >{}{}\n".format(veh.mod_author, veh.name, veh.mod_link("wfta"))
                 desc += "\n"
         if desc_vars.more_info != "":
             desc += desc_vars.more_info + "\n\n"
