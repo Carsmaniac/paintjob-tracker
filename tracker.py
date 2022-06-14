@@ -24,6 +24,9 @@ BUS_RESOURCES_MODLAND = "bus.stuff/modland"
 
 MOD_LINK_PAGE = "https://github.com/Carsmaniac/paintjob-packer/blob/master/library/mod%20links.md"
 KOFI_PAGE = "https://ko-fi.com/carsmaniac"
+WORKSHOP_PAGE_ATS = "https://steamcommunity.com/id/carsmaniac/myworkshopfiles/?appid=270880"
+WORKSHOP_PAGE_ETS = "https://steamcommunity.com/id/carsmaniac/myworkshopfiles/?appid=227300"
+MODLAND_PAGE = "https://www.modland.net/user/carsmaniac"
 
 FORUM_THREAD = {"American Truck Simulator": "https://forum.scssoft.com/viewtopic.php?f=199&t=274416", "Euro Truck Simulator 2": "https://forum.scssoft.com/viewtopic.php?f=37&t=274413"}
 
@@ -544,8 +547,11 @@ class TrackerApp:
             desc += "\n"
         desc += "[img]{}[/img]\n".format(IMAGE_ENJOY)
         desc += "Please don't reupload my mods to other sites. They're already available elsewhere, if you'd like to download them directly. Thanks :)\n\n"
-        desc += "Everything I make is (and always will be) free, but if you'd like to support the creation of my mods you can [url={}]support me on Ko-fi.[/url]\nSupport isn't expected, but it is appreciated!\n\n".format(KOFI_PAGE)
-        desc += "You can [url=https://steamcommunity.com/id/carsmaniac/myworkshopfiles/]follow me on the Workshop[/url] to see more!"
+        desc += "If you'd like to keep up to date with my mods, you can [url={}]follow me on Ko-fi[/url], where you can also support my work with a tip.\n\n".format(KOFI_PAGE)
+        if self.game_short == "ats":
+            desc += "You can also [url={}]follow me on the Workshop[/url] for more paint job packs.".format(WORKSHOP_PAGE_ATS)
+        else:
+            desc += "You can also [url={}]follow me on the Workshop[/url] for more paint job packs.".format(WORKSHOP_PAGE_ETS)
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc.rstrip())
 
@@ -702,7 +708,9 @@ class TrackerApp:
             desc += desc_vars.more_info + "\n\n"
         if desc_vars.other_pack:
             desc += "I've also made a pack for {}:\n{}\n\n".format(desc_vars.other_game, desc_vars.other_pack_modland_link)
-        desc += "Please don't reupload my mods to other sites. Thanks, and enjoy! :)"
+        desc += "Please don't reupload my mods to other sites. Thanks, and enjoy! :)\n\n"
+        desc += "If you'd like to keep up to date with my mods, you can >follow me on Ko-fi{}, where you can also support my work with a tip.\n\n".format(KOFI_PAGE)
+        desc += "You can also >follow me on ModLand{} for more paint job packs.".format(MODLAND_PAGE)
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc.rstrip())
 
@@ -751,7 +759,8 @@ class TrackerApp:
             else:
                 desc += "I've also made a pack for Euro Truck Simualtor 2, you can find it on ets2.lt\n\n"
         desc += "Changelog for " + desc_vars.changelog.replace("Version", "version").replace("\n", ":\n", 1) + "\n\n"
-        desc += "Please don't reupload my mods to other sites. Thanks, and enjoy! :)"
+        desc += "Please don't reupload my mods to other sites. Thanks, and enjoy! :)\n\n"
+        desc += "If you'd like to keep up to date with my mods, you can follow me on Ko-fi, where you can also support my work with a tip:\n{}".format(KOFI_PAGE)
         self.description_output.delete("1.0", "end")
         self.description_output.insert("1.0", desc.rstrip())
 
